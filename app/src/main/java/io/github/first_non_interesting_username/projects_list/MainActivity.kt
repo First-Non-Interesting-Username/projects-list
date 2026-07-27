@@ -15,8 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.padding
 
 
 class MainActivity : ComponentActivity() {
