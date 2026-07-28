@@ -41,9 +41,7 @@ class MainActivity : ComponentActivity() {
             ProjectsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MyButton(
-                        onClick = {
-                        println("Button clicked!")
-                    }, modifier = Modifier
+                         modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
                     )
@@ -55,7 +53,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyButton(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var task by remember { mutableStateOf( "") }
