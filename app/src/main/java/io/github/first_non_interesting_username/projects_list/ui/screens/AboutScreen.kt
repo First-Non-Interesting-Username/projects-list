@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,13 +20,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.solver.widgets.Optimizer.enabled
 import androidx.navigation.NavHostController
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import io.github.first_non_interesting_username.projects_list.R
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +42,7 @@ fun AboutScreen(navController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            painter = painterResource(R.drawable.ic_arrow_back),
                             contentDescription = "Back",
                         )
                     }
@@ -56,14 +56,14 @@ fun AboutScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(16.dp),
         ) {
-            HorizontalDivider()
+            MainSection()
         }
     }
 }
 
 @Composable
 fun ActionRow(
-    icon: ImageVector,
+    icon: Painter,
     title: String,
     subtitle: String,
     onClick: () -> Unit,
@@ -78,7 +78,7 @@ fun ActionRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = icon,
+            painter = icon,
             contentDescription = title,
             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
             modifier = Modifier.size(28.dp),
@@ -99,5 +99,38 @@ fun ActionRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+    }
+}
+
+@Composable
+fun SectionHeader(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    Text(
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+        text = text,
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+    )
+}
+
+@Composable
+fun MainSection(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        SectionHeader(text = "main")
+        ActionRow(
+            icon = painterResource(R.drawable.ic_public),
+            title = "Name: Projects",
+            subtitle = "somethign",
+            enabled = true,
+            onClick = {},
+        )
     }
 }
