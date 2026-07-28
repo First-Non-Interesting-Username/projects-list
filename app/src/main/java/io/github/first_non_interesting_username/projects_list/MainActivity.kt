@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -92,21 +93,16 @@ fun ResetButton(
 }
 
 @Composable
-fun ConfirmationSwitch(
-    value: Boolean,
-    onValueChange: (Boolean) -> Unit
-) {
-    Switch(
-        checked = value,
-        onCheckedChange = onValueChange
-    )
+fun ConfirmationButton(onClick: () -> Unit) {
+    FilledTonalButton(onClick = { onClick() }) {
+        Text("Add task")
+    }
 }
-
 
 @Composable
 fun MyColumn(modifier: Modifier = Modifier) {
     var taskList = remember { mutableStateMapOf<Int, String>() }
-    var confirmTask by remember { mutableStateOf(false) }
+    var nextId by remember { mutableStateOf(0) }
 
     Column(
         modifier = modifier,
@@ -114,17 +110,18 @@ fun MyColumn(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         TaskInputField(
-            task = taskList.getOrPut(0) { "" },
-            onTaskChange = { taskList[0] = it },
+            task = taskList.getOrPut(nextId) { "" },
+            onTaskChange = { taskList[nextId] = it },
         )
         Spacer(Modifier.height(8.dp))
-        ConfirmationSwitch(
-            value = confirmTask,
-            onValueChange = { confirmTask = it }
+        ConfirmationButton(
+            onClick = ( {nextId++ })
         )
         for ((taskIndex, task) in taskList) {
-            Spacer(Modifier.height(8.dp))
-            TaskDisplay(task = task)
+            if (task.isNotEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                TaskDisplay(task = task)
+            }
         }
         Spacer(Modifier.height(8.dp))
         ResetButton(onClick = {
