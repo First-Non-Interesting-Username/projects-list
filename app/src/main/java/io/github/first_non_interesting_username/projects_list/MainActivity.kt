@@ -67,6 +67,7 @@ fun TaskInputField(
 @Composable
 fun TaskDisplay(
     task: String,
+    taskNumber: String,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -75,7 +76,7 @@ fun TaskDisplay(
         modifier = modifier,
     ) {
         Text(
-            text = "Task: $task",
+            text = "Task $taskNumber: $task",
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(16.dp)
         )
@@ -120,7 +121,8 @@ fun MyColumn(modifier: Modifier = Modifier) {
         for ((taskIndex, task) in taskList) {
             if (task.isNotEmpty()) {
                 Spacer(Modifier.height(8.dp))
-                TaskDisplay(task = task)
+                TaskDisplay(task = task, taskNumber = taskIndex.toString()
+                )
             }
         }
         Spacer(Modifier.height(8.dp))
