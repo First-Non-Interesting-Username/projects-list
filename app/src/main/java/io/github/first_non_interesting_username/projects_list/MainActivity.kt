@@ -119,7 +119,7 @@ fun MyColumn(modifier: Modifier = Modifier) {
             onClick = ( {nextId++ })
         )
         for ((taskIndex, task) in taskList) {
-            if (task.isNotEmpty()) {
+            if (task.isNotEmpty() && taskIndex != nextId) {
                 Spacer(Modifier.height(8.dp))
                 TaskDisplay(task = task, taskNumber = taskIndex.toString()
                 )
