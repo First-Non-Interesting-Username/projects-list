@@ -1,5 +1,6 @@
 package io.github.first_non_interesting_username.projects_list
 
+import android.R
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -62,7 +63,7 @@ fun TaskInputField(
     OutlinedTextField(
         value = task,
         onValueChange = onTaskChange,
-        label = { Text("Name") },
+        label = { Text("Task") },
         singleLine = true,
         modifier = modifier,
     )
@@ -97,8 +98,21 @@ fun ResetButton(
 }
 
 @Composable
+fun ConfirmationSwitch(
+    value: Boolean,
+    onValueChange: (Boolean) -> Unit
+) {
+    Switch(
+        checked = value,
+        onCheckedChange = onValueChange
+    )
+}
+
+
+@Composable
 fun MyColumn(modifier: Modifier = Modifier) {
-    val taskList = remember { mutableStateMapOf(0 to "") }
+    var taskList = remember { mutableStateMapOf(0 to "") }
+    var confirmTask by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier,
@@ -108,6 +122,11 @@ fun MyColumn(modifier: Modifier = Modifier) {
         TaskInputField(
             task = taskList[0].orEmpty(),
             onTaskChange = { taskList[0] = it },
+        )
+        Spacer(Modifier.height(8.dp))
+        ConfirmationSwitch(
+            value = confirmTask,
+            onValueChange = { confirmTask = it }
         )
         for ((taskIndex, task) in taskList) {
         Spacer(Modifier.height(8.dp))
