@@ -7,18 +7,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,31 +40,95 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.fillMaxWidth
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
 
-
+object Routes {
+    const val HOME = "home"
+    const val SETTINGS = "settings"
+}
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ProjectsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Scaffold(
-                        modifier = Modifier.fillMaxSize(),
-                        topBar = { AppTopBar() },
-                    ) { innerPadding ->
-                        MyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                        )
-                    }
-                }
+                AppNavigation()
             }
         }
     }
 
+    @Composable
+    fun AppNavigation() {
+        val navController = rememberNavController()
+
+        NavHost(
+            navController = navController,
+            startDestination = Routes.HOME,
+        ) {
+            composable(Routes.HOME) {
+                HomeScreen(navController)
+            }
+            composable(Routes.SETTINGS) {
+                SettingsScreen(navController)
+            }
+        }
+    }
+
+    @Composable
+    fun HomeScreen(navController: NavHostController) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                AppTopBar(
+                    onSettingsClick = { navController.navigate(Routes.SETTINGS) },
+                )
+            },
+        ) { innerPadding ->
+            MyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            )
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun SettingsScreen(navController: NavHostController) {
+        var darkMode by remember { mutableStateOf(false) }
+        var notifications by remember { mutableStateOf(true) }
+
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopAppBar(
+                    title = { Text("Settings") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                            )
+                        }
+                    },
+                )
+            },
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
+            ) {
+                HorizontalDivider()
+            }
+        }
+    }
 
     @Composable
     fun TaskInputField(
@@ -151,7 +218,7 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun AppTopBar() {
+    fun AppTopBar(onSettingsClick: () -> Unit) {
         var expanded by remember { mutableStateOf(false) }
 
         TopAppBar(
@@ -167,7 +234,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     DropdownMenuItem(
                         text = { Text("Settings") },
-                        onClick = { expanded = false }
+                        onClick = {
+                            expanded = false
+                            onSettingsClick()
+                        }
                     )
                     DropdownMenuItem(
                         text = { Text("About") },
