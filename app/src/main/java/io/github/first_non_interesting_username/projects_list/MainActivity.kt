@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -52,13 +54,23 @@ fun MyButton(
         contentAlignment = Alignment.Center
     ) {
         var count by remember { mutableIntStateOf(0) }
-        Button(
-            onClick = {
-                count++
-                onClick()
-            }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Count: $count")
+            Button(
+                onClick = {
+                    count++
+                    onClick()
+                }
+            ) {
+                Text("Count: $count")
+            }
+            Button(
+                onClick = { count = 0 }
+            ) {
+                Text("Reset")
+            }
         }
     }
 }
