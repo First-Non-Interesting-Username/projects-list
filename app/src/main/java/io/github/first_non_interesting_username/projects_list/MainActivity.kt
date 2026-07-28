@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +25,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             ProjectsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    MyButton(
+                        onClick = {
+                        println("Button clicked!")
+                    }, modifier = Modifier
+                                .fillMaxSize()
+                            .padding(innerPadding)
                     )
                 }
             }
@@ -35,21 +39,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun MyButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "Hi, my name is $name!",
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ProjectsTheme {
-        Greeting("Android")
+        Button(onClick = { onClick() }) {
+            Text("Filled")
+        }
     }
 }
