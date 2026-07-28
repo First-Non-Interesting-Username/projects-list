@@ -166,11 +166,11 @@ class MainActivity : ComponentActivity() {
                     onDismissRequest = { expanded = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Option 1") },
+                        text = { Text("Settings") },
                         onClick = { expanded = false }
                     )
                     DropdownMenuItem(
-                        text = { Text("Option 2") },
+                        text = { Text("About") },
                         onClick = { expanded = false }
                     )
                 }
