@@ -31,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
 import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 
 
 class MainActivity : ComponentActivity() {
@@ -96,7 +98,7 @@ fun ResetButton(
 
 @Composable
 fun MyColumn(modifier: Modifier = Modifier) {
-    var task by remember { mutableStateOf("") }
+    val taskList = remember { mutableStateMapOf("0" to "") }
 
     Column(
         modifier = modifier,
@@ -104,12 +106,12 @@ fun MyColumn(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         TaskInputField(
-            task = task,
-            onTaskChange = { task = it },
+            task = taskList["0"].orEmpty(),
+            onTaskChange = { taskList["0"] = it },
         )
         Spacer(Modifier.height(8.dp))
-        TaskDisplay(task = task)
+        TaskDisplay(task = taskList["0"].orEmpty())
         Spacer(Modifier.height(8.dp))
-        ResetButton(onClick = { task = "" })
+        ResetButton(onClick = { taskList["0"] = "" })
     }
 }
