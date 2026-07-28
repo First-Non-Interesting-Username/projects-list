@@ -58,33 +58,32 @@ fun MyButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isEnabled by remember { mutableStateOf(false) }
+    var task by remember { mutableStateOf( "") }
 
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
+        OutlinedTextField(
+            value = task,
+            onValueChange = { task = it },
+            label = { Text("Name") },
+            singleLine = true,
+        )
+        Spacer(Modifier.height(8.dp))
         Surface(
             shape = RoundedCornerShape(12.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
-            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Enabled: $isEnabled",
+                text = "Task: $task",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(16.dp)
             )
         }
         Spacer(Modifier.height(8.dp))
-        Switch(
-            checked = isEnabled,
-            onCheckedChange = {
-                isEnabled = it
-            }
-        )
-        Spacer(Modifier.height(8.dp))
-        Button(onClick = { isEnabled = false}) {
+        Button(onClick = { task = ""}) {
             Text("Reset")
         }
     }
