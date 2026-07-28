@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ProjectsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MyButton(
+                    MyColumn(
                          modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
@@ -52,36 +52,64 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyButton(
-    modifier: Modifier = Modifier
+fun TaskInputField(
+    task: String,
+    onTaskChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    var task by remember { mutableStateOf( "") }
+    OutlinedTextField(
+        value = task,
+        onValueChange = onTaskChange,
+        label = { Text("Name") },
+        singleLine = true,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun TaskDisplay(
+    task: String,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = modifier,
+    ) {
+        Text(
+            text = "Task: $task",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Composable
+fun ResetButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Button(onClick = onClick, modifier = modifier) {
+        Text("Reset")
+    }
+}
+
+@Composable
+fun MyColumn(modifier: Modifier = Modifier) {
+    var task by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        OutlinedTextField(
-            value = task,
-            onValueChange = { task = it },
-            label = { Text("Name") },
-            singleLine = true,
+        TaskInputField(
+            task = task,
+            onTaskChange = { task = it },
         )
         Spacer(Modifier.height(8.dp))
-        Surface(
-            shape = RoundedCornerShape(12.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-        ) {
-            Text(
-                text = "Task: $task",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(16.dp)
-            )
-        }
+        TaskDisplay(task = task)
         Spacer(Modifier.height(8.dp))
-        Button(onClick = { task = ""}) {
-            Text("Reset")
-        }
+        ResetButton(onClick = { task = "" })
     }
 }
