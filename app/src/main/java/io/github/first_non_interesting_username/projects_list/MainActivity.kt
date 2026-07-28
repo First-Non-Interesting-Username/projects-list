@@ -109,8 +109,10 @@ fun MyColumn(modifier: Modifier = Modifier) {
             task = taskList["0"].orEmpty(),
             onTaskChange = { taskList["0"] = it },
         )
+        for ((taskIndex, task) in taskList) {
         Spacer(Modifier.height(8.dp))
-        TaskDisplay(task = taskList["0"].orEmpty())
+        TaskDisplay(task = task)
+        }
         Spacer(Modifier.height(8.dp))
         ResetButton(onClick = { for ((taskIndex, task) in taskList) { taskList[taskIndex] = "" }})
     }
