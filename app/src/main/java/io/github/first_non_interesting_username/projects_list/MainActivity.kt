@@ -98,7 +98,7 @@ fun ResetButton(
 
 @Composable
 fun MyColumn(modifier: Modifier = Modifier) {
-    val taskList = remember { mutableStateMapOf("0" to "") }
+    val taskList = remember { mutableStateMapOf(0 to "") }
 
     Column(
         modifier = modifier,
@@ -106,8 +106,8 @@ fun MyColumn(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         TaskInputField(
-            task = taskList["0"].orEmpty(),
-            onTaskChange = { taskList["0"] = it },
+            task = taskList[0].orEmpty(),
+            onTaskChange = { taskList[0] = it },
         )
         for ((taskIndex, task) in taskList) {
         Spacer(Modifier.height(8.dp))
