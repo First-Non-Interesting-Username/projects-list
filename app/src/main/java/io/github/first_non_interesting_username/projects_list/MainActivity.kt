@@ -44,8 +44,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MyColumn(
                          modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
+                             .fillMaxSize()
+                             .padding(innerPadding)
                     )
                 }
             }
@@ -112,6 +112,6 @@ fun MyColumn(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(8.dp))
         TaskDisplay(task = taskList["0"].orEmpty())
         Spacer(Modifier.height(8.dp))
-        ResetButton(onClick = { taskList["0"] = "" })
+        ResetButton(onClick = { for ((taskIndex, task) in taskList) { taskList[taskIndex] = "" }})
     }
 }
