@@ -42,7 +42,7 @@ fun HomeScreen(navController: NavHostController) {
         topBar = {
             AppTopBar(
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
-                onAboutClick = { navController.navigate(Routes.SETTINGS) },
+                onAboutClick = { navController.navigate(Routes.ABOUT) },
             )
         },
     ) { innerPadding ->
@@ -167,7 +167,8 @@ fun AppTopBar(onSettingsClick: () -> Unit,
                 )
                 DropdownMenuItem(
                     text = { Text("About") },
-                        onClick = { expanded = false
+                        onClick = {
+                            expanded = false
                         onAboutClick()
                     }
                 )
