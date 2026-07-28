@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import io.github.first_non_interesting_username.projects_list.MainActivity
 import io.github.first_non_interesting_username.projects_list.Routes
 import kotlin.collections.iterator
 
@@ -43,6 +42,7 @@ fun HomeScreen(navController: NavHostController) {
         topBar = {
             AppTopBar(
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
+                onAboutClick = { navController.navigate(Routes.SETTINGS) },
             )
         },
     ) { innerPadding ->
@@ -135,6 +135,7 @@ fun MyColumn(modifier: Modifier = Modifier) {
         ResetButton(onClick = {
             for ((taskIndex, task) in taskList) {
                 taskList[taskIndex] = ""
+                nextId = 0
             }
         })
     }
@@ -142,7 +143,8 @@ fun MyColumn(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar(onSettingsClick: () -> Unit) {
+fun AppTopBar(onSettingsClick: () -> Unit,
+              onAboutClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     TopAppBar(
@@ -165,7 +167,9 @@ fun AppTopBar(onSettingsClick: () -> Unit) {
                 )
                 DropdownMenuItem(
                     text = { Text("About") },
-                    onClick = { expanded = false }
+                        onClick = { expanded = false
+                        onAboutClick()
+                    }
                 )
             }
         }
