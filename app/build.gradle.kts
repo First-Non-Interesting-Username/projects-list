@@ -1,3 +1,8 @@
+import org.gradle.api.provider.ValueSource
+import org.gradle.api.provider.ValueSourceParameters
+import org.gradle.api.file.DirectoryProperty
+import com.android.build.api.variant.BuildConfigField
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -34,8 +39,33 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
+
+androidComponents {
+    onVariants { variant ->
+        val projectRootDir = rootDir  // capture from Project scope, outside parameters block
+
+        val gitHashProvider = providers.of(GitHashValueSource::class) {
+            parameters {
+                rootDir.set(projectRootDir)
+            }
+        }
+
+        variant.buildConfigFields?.put(
+            "GIT_HASH",
+            gitHashProvider.map { hash ->
+                BuildConfigField(
+                    type = "String",
+                    value = "\"$hash\"",
+                    comment = "Git commit hash"
+                )
+            }
+        )
+    }
+}
+
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
@@ -56,4 +86,24 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.material)
     implementation(libs.navigation.compose)
+}
+
+abstract class GitHashValueSource : ValueSource<String, GitHashValueSource.Params> {
+    interface Params : ValueSourceParameters {
+        val rootDir: DirectoryProperty
+    }
+
+    override fun obtain(): String {
+        return try {
+            val process = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+                .directory(parameters.rootDir.get().asFile)
+                .redirectErrorStream(true)
+                .start()
+            val result = process.inputStream.bufferedReader().readText().trim()
+            process.waitFor()
+            if (process.exitValue() == 0) result else "unknown"
+        } catch (e: Exception) {
+            "unknown"
+        }
+    }
 }

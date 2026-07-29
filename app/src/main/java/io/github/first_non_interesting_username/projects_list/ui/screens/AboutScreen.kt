@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,7 +29,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import io.github.first_non_interesting_username.projects_list.R
-
+import io.github.first_non_interesting_username.projects_list.BuildConfig
+import android.content.pm.PackageManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,9 +128,19 @@ fun MainSection(
     ) {
         SectionHeader(text = "main")
         ActionRow(
+            // Placeholder icon
             icon = painterResource(R.drawable.ic_public),
-            title = "Name: Projects",
-            subtitle = "somethign",
+            title = "Projects List",
+            subtitle = "A very simple app for side project management",
+            enabled = true,
+            onClick = {},
+        )
+        Spacer(Modifier.height(8.dp))
+        ActionRow(
+            // Placeholder icon
+            icon = painterResource(R.drawable.ic_info),
+            title = "Version",
+            subtitle = "v${BuildConfig.VERSION_NAME} (Build: ${BuildConfig.GIT_HASH})",
             enabled = true,
             onClick = {},
         )
