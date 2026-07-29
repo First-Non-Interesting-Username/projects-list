@@ -154,7 +154,7 @@ fun MainSection(
             title = "Projects List",
             subtitle = "A simple app for side project management",
             enabled = true,
-            onClick = {},
+            onClick = {}, // Add some easter egg here
         )
         Spacer(Modifier.height(8.dp))
         ActionRow(
@@ -178,5 +178,20 @@ fun MainSection(
             onClick = { openUrl(context, "https://github.com/First-Non-Interesting-Username/projects-list") },
         )
         Spacer(Modifier.height(8.dp))
+        ActionRow(
+            icon = painterResource(R.drawable.ic_bug_report),
+            title = "Open a Github issue",
+            subtitle = "Bug Report/Feature Request",
+            enabled = true,
+            onClick = { openUrl(context, "https://github.com/First-Non-Interesting-Username/projects-list/issues/new") },
+        )
+        Spacer(Modifier.height(8.dp))
+        ActionRow(
+            icon = painterResource(R.drawable.ic_attribution),
+            title = "License attribution",
+            subtitle = "",
+            enabled = true,
+            onClick = {}, // Open a screen with license attributions
+        )
     }
 }
