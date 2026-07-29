@@ -1,5 +1,8 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
+import android.content.ClipData
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +34,14 @@ import androidx.compose.ui.res.painterResource
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.BuildConfig
 import android.content.pm.PackageManager
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,10 +128,20 @@ fun SectionHeader(
     )
 }
 
+fun openUrl(context: Context, url: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    context.startActivity(intent)
+}
+
 @Composable
 fun MainSection(
     modifier: Modifier = Modifier,
 ) {
+    val clipboard = LocalClipboard.current
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -131,18 +152,31 @@ fun MainSection(
             // Placeholder icon
             icon = painterResource(R.drawable.ic_public),
             title = "Projects List",
-            subtitle = "A very simple app for side project management",
+            subtitle = "A simple app for side project management",
             enabled = true,
             onClick = {},
         )
         Spacer(Modifier.height(8.dp))
         ActionRow(
-            // Placeholder icon
             icon = painterResource(R.drawable.ic_info),
             title = "Version",
             subtitle = "v${BuildConfig.VERSION_NAME} (Build: ${BuildConfig.GIT_HASH})",
             enabled = true,
-            onClick = {},
+            onClick = {
+                scope.launch {
+                    val clipData = ClipData.newPlainText("Projects app git hash", BuildConfig.GIT_HASH)
+                    clipboard.setClipEntry(ClipEntry(clipData))
+                }
+            },
+            )
+        Spacer(Modifier.height(8.dp))
+        ActionRow(
+            icon = painterResource(R.drawable.ic_code),
+            title = "Homepage",
+            subtitle = "Source code and app info",
+            enabled = true,
+            onClick = { openUrl(context, "https://github.com/First-Non-Interesting-Username/projects-list") },
         )
+        Spacer(Modifier.height(8.dp))
     }
 }
