@@ -40,15 +40,20 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import android.net.Uri
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(navController: NavHostController) {
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("About") },
@@ -69,7 +74,9 @@ fun AboutScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(16.dp),
         ) {
-            MainSection(navController = navController)
+            MainSection(
+                navController = navController,
+                snackbarHostState = snackbarHostState,)
         }
     }
 }
@@ -138,6 +145,7 @@ fun openUrl(context: Context, url: String) {
 @Composable
 fun MainSection(
     navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     val clipboard = LocalClipboard.current
@@ -155,7 +163,11 @@ fun MainSection(
             title = "Projects List",
             subtitle = "A simple app for side project management",
             enabled = true,
-            onClick = {}, // Add some easter egg here
+            onClick = {
+                scope.launch {
+                    snackbarHostState.showSnackbar("Made in HackClub")
+                }
+            },
         )
         Spacer(Modifier.height(8.dp))
         ActionRow(
@@ -190,7 +202,7 @@ fun MainSection(
         ActionRow(
             icon = painterResource(R.drawable.ic_attribution),
             title = "License attribution",
-            subtitle = "",
+            subtitle = "Libraries and components used in this app",
             enabled = true,
             onClick = { navController.navigate(io.github.first_non_interesting_username.projects_list.Routes.LICENSES) }
         )
