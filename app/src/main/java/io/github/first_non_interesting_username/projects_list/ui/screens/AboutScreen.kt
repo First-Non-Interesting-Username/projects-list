@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import android.net.Uri
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
@@ -74,9 +75,11 @@ fun AboutScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(16.dp),
         ) {
+            HorizontalDivider()
             MainSection(
                 navController = navController,
-                snackbarHostState = snackbarHostState,)
+                snackbarHostState = snackbarHostState,
+                )
         }
     }
 }
@@ -156,7 +159,7 @@ fun MainSection(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        SectionHeader(text = "main")
+        // SectionHeader(text = "main")
         ActionRow(
             // Placeholder icon
             icon = painterResource(R.drawable.ic_public),
