@@ -51,7 +51,7 @@ fun HomeScreen(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
+                .padding(4.dp),
         ) {
             HorizontalDivider()
         }
