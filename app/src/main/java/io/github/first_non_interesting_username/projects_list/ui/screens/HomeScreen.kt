@@ -12,6 +12,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,98 +47,14 @@ fun HomeScreen(navController: NavHostController) {
             )
         },
     ) { innerPadding ->
-        MyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-        )
-    }
-}
-
-@Composable
-fun TaskInputField(
-    task: String,
-    onTaskChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    OutlinedTextField(
-        value = task,
-        onValueChange = onTaskChange,
-        label = { Text("Task") },
-        singleLine = true,
-        modifier = modifier,
-    )
-}
-
-@Composable
-fun TaskDisplay(
-    task: String,
-    taskNumber: String,
-    modifier: Modifier = Modifier,
-) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier,
-    ) {
-        Text(
-            text = "Task $taskNumber: $task",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
-
-@Composable
-fun ResetButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Button(onClick = onClick, modifier = modifier) {
-        Text("Reset")
-    }
-}
-
-@Composable
-fun ConfirmationButton(onClick: () -> Unit) {
-    FilledTonalButton(onClick = { onClick() }) {
-        Text("Add task")
-    }
-}
-
-@Composable
-fun MyColumn(modifier: Modifier = Modifier) {
-    val taskList = remember { mutableStateMapOf<Int, String>() }
-    var nextId by remember { mutableStateOf(0) }
-
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        TaskInputField(
-            task = taskList.getOrPut(nextId) { "" },
-            onTaskChange = { taskList[nextId] = it },
-        )
-        Spacer(Modifier.height(8.dp))
-        ConfirmationButton(
-            onClick = ({ nextId++ })
-        )
-        for ((taskIndex, task) in taskList) {
-            if (task.isNotEmpty() && taskIndex != nextId) {
-                Spacer(Modifier.height(8.dp))
-                TaskDisplay(
-                    task = task, taskNumber = taskIndex.toString()
-                )
-            }
+                .padding(16.dp),
+        ) {
+            HorizontalDivider()
         }
-        Spacer(Modifier.height(8.dp))
-        ResetButton(onClick = {
-            for ((taskIndex, task) in taskList) {
-                taskList[taskIndex] = ""
-                nextId = 0
-            }
-        })
     }
 }
 
@@ -148,7 +65,7 @@ fun AppTopBar(onSettingsClick: () -> Unit,
     var expanded by remember { mutableStateOf(false) }
 
     TopAppBar(
-        title = { Text("Projects List") },
+        title = { Text("Home") },
         modifier = Modifier,
         actions = {
             IconButton(onClick = { expanded = !expanded }) {
