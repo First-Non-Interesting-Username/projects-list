@@ -6,6 +6,7 @@ import com.android.build.api.variant.BuildConfigField
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.aboutlibraries)
 }
 
 android {
@@ -85,6 +86,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.material)
     implementation(libs.navigation.compose)
+    implementation(libs.aboutlibraries.compose)
 }
 
 abstract class GitHashValueSource : ValueSource<String, GitHashValueSource.Params> {
