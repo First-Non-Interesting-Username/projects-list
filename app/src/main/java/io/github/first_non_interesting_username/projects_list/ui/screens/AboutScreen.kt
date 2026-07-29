@@ -69,7 +69,7 @@ fun AboutScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(16.dp),
         ) {
-            MainSection()
+            MainSection(navController = navController)
         }
     }
 }
@@ -137,6 +137,7 @@ fun openUrl(context: Context, url: String) {
 
 @Composable
 fun MainSection(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     val clipboard = LocalClipboard.current
@@ -191,7 +192,7 @@ fun MainSection(
             title = "License attribution",
             subtitle = "",
             enabled = true,
-            onClick = {}, // Open a screen with license attributions
+            onClick = { navController.navigate(io.github.first_non_interesting_username.projects_list.Routes.LICENSES) }
         )
     }
 }

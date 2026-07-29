@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.github.first_non_interesting_username.projects_list.ui.screens.AboutScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.LicensesScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.HomeScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SettingsScreen
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
@@ -40,6 +41,9 @@ class MainActivity : ComponentActivity() {
             }
             composable(Routes.ABOUT) {
                 AboutScreen(navController)
+            }
+            composable(Routes.LICENSES) {
+                LicensesScreen(navController)
             }
         }
     }
