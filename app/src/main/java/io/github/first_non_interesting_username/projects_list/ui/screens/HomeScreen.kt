@@ -12,6 +12,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -45,6 +46,19 @@ fun HomeScreen(navController: NavHostController) {
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
                 onAboutClick = { navController.navigate(Routes.ABOUT) },
             )
+        },
+        floatingActionButton = {
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                FloatingActionButton(onClick = { /* TODO */ }) {
+                    Icon(painter = painterResource(R.drawable.ic_search), contentDescription = "Search projects")
+                }
+                FloatingActionButton(onClick = { /* TODO */ }) {
+                    Icon(painter = painterResource(R.drawable.ic_add), contentDescription = "Add project")
+                }
+            }
         },
     ) { innerPadding ->
         Column(
