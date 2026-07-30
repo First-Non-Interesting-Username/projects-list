@@ -1,8 +1,11 @@
 package io.github.first_non_interesting_username.projects_list.app.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import io.github.first_non_interesting_username.projects_list.ProjectsApplication
 import io.github.first_non_interesting_username.projects_list.data.model.Project
 import io.github.first_non_interesting_username.projects_list.data.model.Task
 import io.github.first_non_interesting_username.projects_list.data.model.withNewTask
@@ -10,23 +13,29 @@ import io.github.first_non_interesting_username.projects_list.data.model.withUpd
 import io.github.first_non_interesting_username.projects_list.data.model.withoutTask
 import io.github.first_non_interesting_username.projects_list.data.repository.ProjectRepository
 import kotlinx.coroutines.flow.StateFlow
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import io.github.first_non_interesting_username.projects_list.ProjectsApplication
 
 class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() {
 
     val projects: StateFlow<List<Project>> = repository.projects
 
-    fun addProject(chronology: Int, title: String, description: String = "", link: String, priority: Int, motivation: Int) {
-        repository.addProject(Project(
-            chronology = chronology,
-            title = title,
-            description = description,
-            link = link,
-            priority = priority,
-            motivation = motivation,
-            ))
+    fun addProject(
+        chronology: Int,
+        title: String,
+        description: String = "",
+        link: String,
+        priority: Int,
+        motivation: Int
+    ) {
+        repository.addProject(
+            Project(
+                chronology = chronology,
+                title = title,
+                description = description,
+                link = link,
+                priority = priority,
+                motivation = motivation,
+            )
+        )
     }
 
     fun deleteProject(uuid: String) = repository.deleteProject(uuid)

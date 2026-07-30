@@ -51,4 +51,5 @@ fun NewProjectScreen(navController: NavHostController) {
 @Composable
 fun TextBox(
     modifier: Modifier = Modifier,
-) {}
+) {
+}

@@ -1,6 +1,3 @@
-import org.gradle.api.provider.ValueSource
-import org.gradle.api.provider.ValueSourceParameters
-import org.gradle.api.file.DirectoryProperty
 import com.android.build.api.variant.BuildConfigField
 
 plugins {
