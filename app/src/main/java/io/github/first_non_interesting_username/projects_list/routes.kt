@@ -5,4 +5,5 @@ object Routes {
     const val SETTINGS = "settings"
     const val ABOUT = "about"
     const val LICENSES = "licenses"
+    const val NEW_PROJECT = "new_project"
 }

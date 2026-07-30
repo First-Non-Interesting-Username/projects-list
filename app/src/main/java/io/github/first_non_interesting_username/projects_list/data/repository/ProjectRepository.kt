@@ -44,8 +44,8 @@ class ProjectRepository(context: Context) {
         persist()
     }
 
-    fun deleteProject(id: String) {
-        _projects.value = _projects.value.filterNot { it.uuid == id }
+    fun deleteProject(uuid: String) {
+        _projects.value = _projects.value.filterNot { it.uuid == uuid }
         persist()
     }
 

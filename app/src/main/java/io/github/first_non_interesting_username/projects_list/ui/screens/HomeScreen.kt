@@ -55,7 +55,7 @@ fun HomeScreen(navController: NavHostController) {
                 FloatingActionButton(onClick = { /* TODO */ }) {
                     Icon(painter = painterResource(R.drawable.ic_search), contentDescription = "Search projects")
                 }
-                FloatingActionButton(onClick = { /* TODO */ }) {
+                FloatingActionButton(onClick = { navController.navigate(Routes.NEW_PROJECT) }) {
                     Icon(painter = painterResource(R.drawable.ic_add), contentDescription = "Add project")
                 }
             }
