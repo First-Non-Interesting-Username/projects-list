@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.aboutlibraries)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -88,6 +89,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.compose)
     implementation(libs.aboutlibraries.compose)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }
 
 abstract class GitHashValueSource : ValueSource<String, GitHashValueSource.Params> {
