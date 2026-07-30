@@ -4,11 +4,14 @@ import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
-data class Task(
+data class Project(
     val uuid: String = UUID.randomUUID().toString(),
     val chronology: Int,
     val title: String,
     val description: String = "",
+    val link: String,
+    val tasks: List<Task> = emptyList(),
+    val createdAt: Long = System.currentTimeMillis(),
     val priority: Int,
     val motivation: Int,
 ) {
