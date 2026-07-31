@@ -66,77 +66,84 @@ fun NewProjectScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(4.dp),
-        ) {
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(
-                state = rememberTextFieldState(),
-                label = { Text("Name") },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-            )
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(
-                state = rememberTextFieldState(),
-                label = { Text("Description") },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-                lineLimits = TextFieldLineLimits.MultiLine(
-                    minHeightInLines = 3,
-                    maxHeightInLines = 6
-                )
-            )
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(
-                state = rememberTextFieldState(),
-                label = { Text("Link") },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-            )
-            Spacer(Modifier.height(8.dp))
-            SliderWithDescription(
-                value = priorityFloat,
-                onValueChange = { priorityFloat = it },
-                text = "Priority",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-                textModifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-                keyModifier = Modifier
-
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-            )
-            Spacer(Modifier.height(8.dp))
-            SliderWithDescription(
-                value = motivationFloat,
-                onValueChange = { motivationFloat = it },
-                text = "Motivation",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-                textModifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-                keyModifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.9f),
-            )
-            Spacer(Modifier.height(8.dp))
-
-        }
+        ProjectEditingColumn(modifier = Modifier.padding(innerPadding))
     }
 }
 
+@Composable
+fun ProjectEditingColumn(
+    modifier: Modifier
+)
+{
+    Column(
+        modifier = modifier.then( Modifier
+            .fillMaxSize()
+            .padding(4.dp),
+            )
+    ) {
+        var priorityFloat by remember { mutableFloatStateOf(0f) }
+        var motivationFloat by remember { mutableFloatStateOf(0f) }
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            state = rememberTextFieldState(),
+            label = { Text("Name") },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+        )
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            state = rememberTextFieldState(),
+            label = { Text("Description") },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+            lineLimits = TextFieldLineLimits.MultiLine(
+                minHeightInLines = 3,
+                maxHeightInLines = 6
+            )
+        )
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            state = rememberTextFieldState(),
+            label = { Text("Link") },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+        )
+        Spacer(Modifier.height(8.dp))
+        SliderWithDescription(
+            value = priorityFloat,
+            onValueChange = { priorityFloat = it },
+            text = "Priority",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+            textModifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+            keyModifier = Modifier
+
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+        )
+        Spacer(Modifier.height(8.dp))
+        SliderWithDescription(
+            value = motivationFloat,
+            onValueChange = { motivationFloat = it },
+            text = "Motivation",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+            textModifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+            keyModifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.9f),
+        )
+    }
+}
 @Composable
 fun ActionButton(
     onClick: () -> Unit,
