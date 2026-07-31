@@ -32,8 +32,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.platform.LocalContext
+import io.github.first_non_interesting_username.projects_list.util.openUrl
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +44,8 @@ fun NewProjectScreen(navController: NavHostController) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
     var isEditing by remember { mutableStateOf(false) }
-    var linkText by remember { mutableStateOf("test") }
+    var linkText by remember { mutableStateOf("github.com") }
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -127,6 +131,7 @@ fun NewProjectScreen(navController: NavHostController) {
                 onValueChange = {linkText = it},
                 isEditing = isEditing,
                 onEditClick = {isEditing = !isEditing},
+                onClick = {context.openUrl(linkText)}
             )
         }
     }
@@ -169,12 +174,14 @@ fun LinkRow(
     onValueChange: (String) -> Unit,
     isEditing: Boolean,
     onEditClick: (Boolean) -> Unit,
+    onClick: () -> Unit,
 ) {
     Row(modifier = modifier,) {
         if (isEditing) {
             OutlinedTextField(
                 value = initialText,
                 onValueChange = onValueChange,
+                modifier = Modifier.weight(1f)
             )
         } else {
             Text(
@@ -182,7 +189,7 @@ fun LinkRow(
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-
+                        onClick
                 }
             )
         }
