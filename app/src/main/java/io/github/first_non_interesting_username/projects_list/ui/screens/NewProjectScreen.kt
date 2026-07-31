@@ -24,6 +24,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,6 +40,9 @@ import io.github.first_non_interesting_username.projects_list.R
 fun NewProjectScreen(navController: NavHostController) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var link by remember { mutableStateOf("") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -66,13 +70,26 @@ fun NewProjectScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
-        ProjectEditingColumn(modifier = Modifier.padding(innerPadding))
+        ProjectEditingColumn(modifier = Modifier.padding(innerPadding),
+            nameValue = name,
+            onNameValueChange = {name = it},
+            descriptionValue = description,
+            onDescriptionValueChange = {description = it},
+            linkValue = link,
+            onLinkValueChange = {link = it},
+        )
     }
 }
 
 @Composable
 fun ProjectEditingColumn(
-    modifier: Modifier
+    modifier: Modifier,
+    nameValue: String,
+    onNameValueChange: (String) -> Unit,
+    descriptionValue: String,
+    onDescriptionValueChange: (String) -> Unit,
+    linkValue: String,
+    onLinkValueChange: (String) -> Unit,
 )
 {
     Column(
@@ -85,31 +102,34 @@ fun ProjectEditingColumn(
         var motivationFloat by remember { mutableFloatStateOf(0f) }
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
-            state = rememberTextFieldState(),
+            value = nameValue,
+            onValueChange = onNameValueChange,
             label = { Text("Name") },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(0.9f),
+            maxLines = 1,
         )
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
-            state = rememberTextFieldState(),
+            value = descriptionValue,
+            onValueChange = onDescriptionValueChange,
             label = { Text("Description") },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(0.9f),
-            lineLimits = TextFieldLineLimits.MultiLine(
-                minHeightInLines = 3,
-                maxHeightInLines = 6
-            )
+            minLines = 3,
+            maxLines = 6,
         )
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
-            state = rememberTextFieldState(),
+            value = linkValue,
+            onValueChange = onLinkValueChange,
             label = { Text("Link") },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(0.9f),
+            maxLines = 1,
         )
         Spacer(Modifier.height(8.dp))
         SliderWithDescription(
@@ -144,6 +164,7 @@ fun ProjectEditingColumn(
         )
     }
 }
+
 @Composable
 fun ActionButton(
     onClick: () -> Unit,
