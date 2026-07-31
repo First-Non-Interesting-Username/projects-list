@@ -78,7 +78,7 @@ fun NewProjectScreen(navController: NavHostController) {
                 label = { Text("Name") },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
             )
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(
@@ -86,7 +86,7 @@ fun NewProjectScreen(navController: NavHostController) {
                 label = { Text("Description") },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
                 lineLimits = TextFieldLineLimits.MultiLine(
                     minHeightInLines = 3,
                     maxHeightInLines = 6
@@ -99,13 +99,13 @@ fun NewProjectScreen(navController: NavHostController) {
                 text = "Priority",
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
                 textModifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
                 keyModifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
             )
             Spacer(Modifier.height(8.dp))
             SliderWithDescription(
@@ -114,19 +114,19 @@ fun NewProjectScreen(navController: NavHostController) {
                 text = "Motivation",
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
                 textModifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
                 keyModifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
             )
             Spacer(Modifier.height(8.dp))
             LinkRow(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.9f),
                 initialText = linkText,
                 onValueChange = { linkText = it },
                 isEditing = isEditing,
