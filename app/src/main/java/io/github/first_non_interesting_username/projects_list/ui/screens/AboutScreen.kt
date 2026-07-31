@@ -26,6 +26,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,6 +44,8 @@ import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.BuildConfig
 import io.github.first_non_interesting_username.projects_list.R
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
+import io.github.first_non_interesting_username.projects_list.util.openUrl
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +58,9 @@ fun AboutScreen(navController: NavHostController) {
         topBar = {
             TopAppBar(
                 title = { Text("About") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -72,7 +78,6 @@ fun AboutScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(4.dp),
         ) {
-            HorizontalDivider()
             MainSection(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
@@ -135,13 +140,6 @@ fun SectionHeader(
     )
 }
 
-fun openUrl(context: Context, url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    context.startActivity(intent)
-}
-
 @Composable
 fun MainSection(
     navController: NavHostController,
@@ -190,10 +188,7 @@ fun MainSection(
             subtitle = "Source code and app info",
             enabled = true,
             onClick = {
-                openUrl(
-                    context,
-                    "https://github.com/First-Non-Interesting-Username/projects-list"
-                )
+                context.openUrl("https://github.com/First-Non-Interesting-Username/projects-list")
             },
         )
         Spacer(Modifier.height(8.dp))
@@ -203,10 +198,7 @@ fun MainSection(
             subtitle = "Bug Report/Feature Request",
             enabled = true,
             onClick = {
-                openUrl(
-                    context,
-                    "https://github.com/First-Non-Interesting-Username/projects-list/issues/new"
-                )
+                context.openUrl("https://github.com/First-Non-Interesting-Username/projects-list/issues/new")
             },
         )
         Spacer(Modifier.height(8.dp))

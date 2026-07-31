@@ -31,6 +31,9 @@ import io.github.first_non_interesting_username.projects_list.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,13 +41,16 @@ fun NewProjectScreen(navController: NavHostController) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
     var isEditing by remember { mutableStateOf(false) }
-    var linkText by remember { mutableStateOf("") }
+    var linkText by remember { mutableStateOf("test") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = { Text("Adding new project") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -62,8 +68,6 @@ fun NewProjectScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(4.dp),
         ) {
-
-            HorizontalDivider()
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(
                 state = rememberTextFieldState(),
@@ -114,6 +118,16 @@ fun NewProjectScreen(navController: NavHostController) {
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.8f),
             )
+            Spacer(Modifier.height(8.dp))
+            LinkRow(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(0.8f),
+                initialText = linkText,
+                onValueChange = {linkText = it},
+                isEditing = isEditing,
+                onEditClick = {isEditing = !isEditing},
+            )
         }
     }
 }
@@ -146,4 +160,39 @@ fun SliderWithDescription(
             Text(text = i.toString())
         }
     }
+}
+
+@Composable
+fun LinkRow(
+    modifier: Modifier,
+    initialText: String,
+    onValueChange: (String) -> Unit,
+    isEditing: Boolean,
+    onEditClick: (Boolean) -> Unit,
+) {
+    Row(modifier = modifier,) {
+        if (isEditing) {
+            OutlinedTextField(
+                value = initialText,
+                onValueChange = onValueChange,
+            )
+        } else {
+            Text(
+                text = initialText,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+
+                }
+            )
+        }
+        Icon(
+            painter = painterResource(R.drawable.ic_edit),
+            contentDescription = "Back",
+            modifier = Modifier.clickable {
+                onEditClick
+            }
+        )
+    }
+
 }
