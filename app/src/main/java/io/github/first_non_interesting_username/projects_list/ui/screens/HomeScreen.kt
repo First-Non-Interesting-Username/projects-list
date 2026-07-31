@@ -1,9 +1,17 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,6 +59,7 @@ fun HomeScreen(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(4.dp),
         ) {
+            ColorSchemePreview()
         }
     }
 }
@@ -97,4 +106,60 @@ fun AppTopBar(
             }
         }
     )
+}
+
+@Composable
+fun ColorSchemePreview() {
+    val colors = listOf(
+        "primary" to MaterialTheme.colorScheme.primary,
+        "onPrimary" to MaterialTheme.colorScheme.onPrimary,
+        "primaryContainer" to MaterialTheme.colorScheme.primaryContainer,
+        "onPrimaryContainer" to MaterialTheme.colorScheme.onPrimaryContainer,
+        "secondary" to MaterialTheme.colorScheme.secondary,
+        "onSecondary" to MaterialTheme.colorScheme.onSecondary,
+        "secondaryContainer" to MaterialTheme.colorScheme.secondaryContainer,
+        "onSecondaryContainer" to MaterialTheme.colorScheme.onSecondaryContainer,
+        "tertiary" to MaterialTheme.colorScheme.tertiary,
+        "onTertiary" to MaterialTheme.colorScheme.onTertiary,
+        "tertiaryContainer" to MaterialTheme.colorScheme.tertiaryContainer,
+        "onTertiaryContainer" to MaterialTheme.colorScheme.onTertiaryContainer,
+        "error" to MaterialTheme.colorScheme.error,
+        "onError" to MaterialTheme.colorScheme.onError,
+        "errorContainer" to MaterialTheme.colorScheme.errorContainer,
+        "onErrorContainer" to MaterialTheme.colorScheme.onErrorContainer,
+        "surface" to MaterialTheme.colorScheme.surface,
+        "onSurface" to MaterialTheme.colorScheme.onSurface,
+        "surfaceVariant" to MaterialTheme.colorScheme.surfaceVariant,
+        "onSurfaceVariant" to MaterialTheme.colorScheme.onSurfaceVariant,
+        "surfaceTint" to MaterialTheme.colorScheme.surfaceTint,
+        "background" to MaterialTheme.colorScheme.background,
+        "onBackground" to MaterialTheme.colorScheme.onBackground,
+        "outline" to MaterialTheme.colorScheme.outline,
+        "outlineVariant" to MaterialTheme.colorScheme.outlineVariant,
+        "scrim" to MaterialTheme.colorScheme.scrim,
+        "inverseSurface" to MaterialTheme.colorScheme.inverseSurface,
+        "inverseOnSurface" to MaterialTheme.colorScheme.inverseOnSurface,
+        "inversePrimary" to MaterialTheme.colorScheme.inversePrimary,
+    )
+
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        colors.forEach { (name, color) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Spacer(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .background(color),
+                )
+                Text(
+                    text = name,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
+        }
+    }
 }
