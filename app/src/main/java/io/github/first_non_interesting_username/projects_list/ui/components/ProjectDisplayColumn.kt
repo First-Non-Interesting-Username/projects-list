@@ -36,9 +36,31 @@ fun ProjectDisplayColumn(
                 .fillMaxSize()
                 .padding(4.dp),
         ) ) {
+        MyTextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = nameValue,
+            label = "Name"
+            )
+        Spacer(Modifier.height(8.dp))
+        MyTextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = descriptionValue,
+            label = "Description"
+        )
+    }
+}
+
+@Composable
+fun MyTextField(
+    value: String,
+    label: String,
+    modifier: Modifier
+) {
+    Box(modifier = modifier) {
         Surface(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
+                .fillMaxWidth()
+                .padding(top = 8.dp)
                 .height(56.dp),
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.secondaryContainer,
@@ -47,46 +69,31 @@ fun ProjectDisplayColumn(
             shadowElevation = 4.dp
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text(
-                    text = nameValue,
+                    text = value,
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
         }
-        Spacer(Modifier.height(8.dp))
-        Surface(
+
+        Text(
+            text = "Name",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .heightIn(min = 56.dp),
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            tonalElevation = 2.dp,
-            shadowElevation = 4.dp
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 56.dp),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Text(
-                    text = descriptionValue,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(16.dp),
-                    maxLines = 6,
-                    minLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(4.dp)
                 )
-            }
-        }
+                .padding(horizontal = 4.dp)
+        )
     }
 }
