@@ -35,7 +35,6 @@ fun NewProjectScreen(navController: NavHostController) {
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var link by remember { mutableStateOf("") }
-    var clicked by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
