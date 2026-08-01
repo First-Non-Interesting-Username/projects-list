@@ -3,6 +3,8 @@ package io.github.first_non_interesting_username.projects_list.ui.screens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -61,10 +63,15 @@ fun NewProjectScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
-        Column() {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
         ProjectDisplayColumn(
             nameValue = "Name",
-            descriptionValue = "Description",
+            descriptionValue = """
+                DEFG
+                SGA
+                Agg
+                AGTweg
+            """.trimIndent(),
             linkValue = "https://example.com",
             priorityValue = 0f,
             motivationValue = 0f,
