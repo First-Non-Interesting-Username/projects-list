@@ -11,6 +11,7 @@ data class Task(
     val description: String = "",
     val priority: Float,
     val motivation: Float,
+    val completed: Boolean = false,
 ) {
     init {
         require(priority in 0f..10f) { "priority must be 0–10, got $priority" }

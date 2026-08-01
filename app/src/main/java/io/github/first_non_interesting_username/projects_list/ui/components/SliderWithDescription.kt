@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 fun SliderWithDescription(
     value: Float,
     modifier: Modifier,
-    onValueChange: (Float) -> Unit,
+    onValueChange: (Float) -> Unit = {},
     textModifier: Modifier,
     text: String,
     keyModifier: Modifier,
+    enabled: Boolean = true,
 ) {
 
     Text(
@@ -27,6 +28,7 @@ fun SliderWithDescription(
         valueRange = 0f..10f,
         steps = 9,
         modifier = modifier,
+        enabled = enabled,
     )
 
     Row(
