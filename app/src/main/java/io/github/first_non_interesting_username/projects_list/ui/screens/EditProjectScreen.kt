@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +32,7 @@ import io.github.first_non_interesting_username.projects_list.ui.components.Aler
 import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectEditingColumn
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProjectScreen(navController: NavHostController) {
@@ -40,6 +43,8 @@ fun EditProjectScreen(navController: NavHostController) {
     var link by remember { mutableStateOf("") }
     var finished by remember { mutableStateOf(false) }
     var confirmationDialog by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
+    var deletionDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -57,6 +62,26 @@ fun EditProjectScreen(navController: NavHostController) {
                         )
                     }
                 },
+                actions = {
+                    IconButton(onClick = { expanded = !expanded }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_more_vert),
+                            contentDescription = "More options"
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Delete") },
+                            onClick = {
+                                expanded = false
+                                deletionDialog = !deletionDialog
+                            }
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -109,6 +134,20 @@ fun EditProjectScreen(navController: NavHostController) {
                     "Do you want to mark project $name as unfinished?"
                 },
                 icon = painterResource(R.drawable.ic_done_all)
+            )
+        }
+        if (deletionDialog) {
+            AlertDialogExample(
+                onDismissRequest = { deletionDialog = !deletionDialog },
+                onConfirmation = {
+                    deletionDialog = !deletionDialog
+                },
+                dialogTitle = "Delete $name",
+                dialogText = """
+                    Do you want to delete project $name with all tasks assigned to it?
+                    This action is irreversible.
+                """.trimIndent(),
+                icon = painterResource(R.drawable.ic_delete_forever)
             )
         }
     }
