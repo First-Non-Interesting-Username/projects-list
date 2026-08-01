@@ -57,21 +57,20 @@ fun MyTextField(
     value: String,
     label: String,
     modifier: Modifier,
+    onClick: (() -> Unit)? = null,
     textMinLines: Int = 1,
-    textMaxLines: Int = maxOf(textMinLines or 1),
+    textMaxLines: Int = textMinLines.coerceAtLeast(1),
 ) {
     Box(modifier = modifier) {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-                .heightIn(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            tonalElevation = 2.dp,
-            shadowElevation = 4.dp
-        ) {
+        val surfaceModifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .heightIn(56.dp)
+
+        val shape = RoundedCornerShape(16.dp)
+        val color = MaterialTheme.colorScheme.secondaryContainer
+
+        val surfaceContent: @Composable () -> Unit = {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.CenterStart
@@ -85,6 +84,27 @@ fun MyTextField(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+        }
+
+        if (onClick != null) {
+            Surface(
+                onClick = onClick,
+                modifier = surfaceModifier,
+                shape = shape,
+                color = color,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                tonalElevation = 2.dp,
+                shadowElevation = 4.dp
+            ) { surfaceContent() }
+        } else {
+            Surface(
+                modifier = surfaceModifier,
+                shape = shape,
+                color = color,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                tonalElevation = 2.dp,
+                shadowElevation = 4.dp
+            ) { surfaceContent() }
         }
 
         Text(
