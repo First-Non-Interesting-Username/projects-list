@@ -24,7 +24,7 @@ enum class Destination(
         iconRes = R.drawable.ic_search,
     ),
     ADD(
-        route = "new_project",
+        route = "project",
         label = "New project",
         iconRes = R.drawable.ic_add,
     ),
@@ -38,11 +38,13 @@ enum class Destination(
 @Composable
 fun AppBottomBar(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.Companion,
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    NavigationBar {
+    NavigationBar(
+        modifier = modifier
+    ) {
         Destination.entries.forEach { destination ->
             NavigationBarItem(
                 selected = currentRoute == destination.route,

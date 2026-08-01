@@ -14,7 +14,7 @@ data class Project(
     val createdAt: Long = System.currentTimeMillis(),
     val priority: Float,
     val motivation: Float,
-    val completed: Boolean = false,
+    val finished: Boolean = false,
 ) {
     init {
         require(priority in 0f..10f) { "priority must be 0–10, got $priority" }

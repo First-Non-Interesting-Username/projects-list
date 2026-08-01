@@ -12,6 +12,7 @@ import io.github.first_non_interesting_username.projects_list.ui.screens.AboutSc
 import io.github.first_non_interesting_username.projects_list.ui.screens.HomeScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.LicensesScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.NewProjectScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.ProjectScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SettingsScreen
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
 
@@ -48,6 +49,9 @@ class MainActivity : ComponentActivity() {
             }
             composable(Routes.NEW_PROJECT) {
                 NewProjectScreen(navController)
+            }
+            composable(Routes.PROJECT) {
+                ProjectScreen(navController)
             }
         }
     }
