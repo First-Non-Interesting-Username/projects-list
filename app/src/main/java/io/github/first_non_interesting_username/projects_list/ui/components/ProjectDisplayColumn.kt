@@ -88,7 +88,7 @@ fun MyTextField(
         }
 
         Text(
-            text = "Name",
+            text = label,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
