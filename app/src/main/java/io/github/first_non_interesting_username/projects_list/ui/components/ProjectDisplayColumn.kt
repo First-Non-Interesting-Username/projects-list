@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import io.github.first_non_interesting_username.projects_list.util.openUrl
+
 
 @Composable
 fun ProjectDisplayColumn(
@@ -17,8 +20,9 @@ fun ProjectDisplayColumn(
     linkValue: String,
     priorityValue: Float,
     motivationValue: Float,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier.then(
             Modifier
@@ -37,6 +41,13 @@ fun ProjectDisplayColumn(
             label = "Description",
             textMinLines = 3,
             textMaxLines = 6,
+        )
+        Spacer(Modifier.height(8.dp))
+        MyTextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = linkValue,
+            label = "Link",
+            onClick = {context.openUrl("example.com")}
         )
     }
 }
