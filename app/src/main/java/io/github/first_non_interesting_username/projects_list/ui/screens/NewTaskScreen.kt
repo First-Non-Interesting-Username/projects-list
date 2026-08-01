@@ -28,7 +28,7 @@ import io.github.first_non_interesting_username.projects_list.ui.components.Proj
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewProjectScreen(navController: NavHostController) {
+fun NewTaskScreen(navController: NavHostController) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
     var name by remember { mutableStateOf("") }
@@ -78,4 +78,3 @@ fun NewProjectScreen(navController: NavHostController) {
         }
     }
 }
-

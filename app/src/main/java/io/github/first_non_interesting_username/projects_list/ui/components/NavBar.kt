@@ -24,7 +24,7 @@ enum class Destination(
         iconRes = R.drawable.ic_search,
     ),
     ADD(
-        route = "edit_project",
+        route = "new_project",
         label = "New project",
         iconRes = R.drawable.ic_add,
     ),

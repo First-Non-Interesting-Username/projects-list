@@ -31,11 +31,12 @@ import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.AlertDialogExample
 import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
-import io.github.first_non_interesting_username.projects_list.ui.components.ProjectDisplayColumn
+import io.github.first_non_interesting_username.projects_list.ui.components.ProjectEditingColumn
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectScreen(navController: NavHostController) {
+fun EditTaskScreen(navController: NavHostController) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
     var name by remember { mutableStateOf("") }
@@ -50,7 +51,7 @@ fun ProjectScreen(navController: NavHostController) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(name) },
+                title = { Text("Editing $name") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ),
@@ -87,27 +88,32 @@ fun ProjectScreen(navController: NavHostController) {
         floatingActionButton = {
             ActionButton(
                 onClick = {},
-                icon = painterResource(R.drawable.ic_edit),
-                contentDescription = "Edit the project",
+                icon = painterResource(R.drawable.ic_exit_to_app),
+                contentDescription = "Finish editing",
             )
         }
     ) { innerPadding ->
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            ProjectDisplayColumn(
+            ProjectEditingColumn(
                 modifier = Modifier.padding(innerPadding),
                 nameValue = name,
                 descriptionValue = description,
                 linkValue = link,
                 priorityValue = priorityFloat,
                 motivationValue = motivationFloat,
+                onNameValueChange = {name = it},
+                onDescriptionValueChange = {description = it},
+                onLinkValueChange = {link = it},
+                onPriorityChange = {priorityFloat = it},
+                onMotivationChange = {motivationFloat = it},
             )
             Spacer(Modifier.height(8.dp))
             ConfirmationButton(
                 icon = painterResource(R.drawable.ic_done_all),
                 text = "Mark as finished",
                 clickedText = "Mark as unfinished",
-                contentDescription = "Toggle state of completion of the project",
-                onClick = { confirmationDialog = !confirmationDialog },
+                contentDescription = "Toggle state of completion of the task",
+                onClick = { confirmationDialog= !confirmationDialog },
                 clicked = finished
             )
         }
@@ -124,9 +130,9 @@ fun ProjectScreen(navController: NavHostController) {
                     "Mark as unfinished"
                 },
                 dialogText = if (!finished) {
-                    "Do you want to mark project $name as finished?"
+                    "Do you want to mark task $name as finished?"
                 } else {
-                    "Do you want to mark project $name as unfinished?"
+                    "Do you want to mark task $name as unfinished?"
                 },
                 icon = painterResource(R.drawable.ic_done_all)
             )
@@ -139,7 +145,7 @@ fun ProjectScreen(navController: NavHostController) {
                 },
                 dialogTitle = "Delete $name",
                 dialogText = """
-                    Do you want to delete project $name with all tasks assigned to it?
+                    Do you want to delete task $name?
                     This action is irreversible.
                 """.trimIndent(),
                 icon = painterResource(R.drawable.ic_delete_forever)
@@ -147,4 +153,3 @@ fun ProjectScreen(navController: NavHostController) {
         }
     }
 }
-

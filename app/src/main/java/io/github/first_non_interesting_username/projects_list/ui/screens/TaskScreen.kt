@@ -35,7 +35,7 @@ import io.github.first_non_interesting_username.projects_list.ui.components.Proj
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectScreen(navController: NavHostController) {
+fun TaskScreen(navController: NavHostController) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
     var name by remember { mutableStateOf("") }
@@ -88,7 +88,7 @@ fun ProjectScreen(navController: NavHostController) {
             ActionButton(
                 onClick = {},
                 icon = painterResource(R.drawable.ic_edit),
-                contentDescription = "Edit the project",
+                contentDescription = "Edit the task",
             )
         }
     ) { innerPadding ->
@@ -106,7 +106,7 @@ fun ProjectScreen(navController: NavHostController) {
                 icon = painterResource(R.drawable.ic_done_all),
                 text = "Mark as finished",
                 clickedText = "Mark as unfinished",
-                contentDescription = "Toggle state of completion of the project",
+                contentDescription = "Toggle state of completion of the task",
                 onClick = { confirmationDialog = !confirmationDialog },
                 clicked = finished
             )
@@ -124,9 +124,9 @@ fun ProjectScreen(navController: NavHostController) {
                     "Mark as unfinished"
                 },
                 dialogText = if (!finished) {
-                    "Do you want to mark project $name as finished?"
+                    "Do you want to mark task $name as finished?"
                 } else {
-                    "Do you want to mark project $name as unfinished?"
+                    "Do you want to mark task $name as unfinished?"
                 },
                 icon = painterResource(R.drawable.ic_done_all)
             )
@@ -139,7 +139,7 @@ fun ProjectScreen(navController: NavHostController) {
                 },
                 dialogTitle = "Delete $name",
                 dialogText = """
-                    Do you want to delete project $name with all tasks assigned to it?
+                    Do you want to delete task $name?
                     This action is irreversible.
                 """.trimIndent(),
                 icon = painterResource(R.drawable.ic_delete_forever)
