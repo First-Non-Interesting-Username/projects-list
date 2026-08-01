@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
-import io.github.first_non_interesting_username.projects_list.ui.components.ProjectDisplayColumn
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectEditingColumn
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +35,7 @@ fun NewProjectScreen(navController: NavHostController) {
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var link by remember { mutableStateOf("") }
+    var clicked by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -64,19 +64,6 @@ fun NewProjectScreen(navController: NavHostController) {
         }
     ) { innerPadding ->
         Column(Modifier.verticalScroll(rememberScrollState())) {
-        ProjectDisplayColumn(
-            nameValue = "Name",
-            descriptionValue = """
-                DEFG
-                SGA
-                Agg
-                AGTweg
-            """.trimIndent(),
-            linkValue = "https://example.com",
-            priorityValue = 0f,
-            motivationValue = 0f,
-            modifier = Modifier.padding(innerPadding)
-        )
         ProjectEditingColumn(
             modifier = Modifier.padding(innerPadding),
             nameValue = name,
@@ -89,7 +76,8 @@ fun NewProjectScreen(navController: NavHostController) {
             onPriorityChange = { priorityFloat = it },
             motivation = motivationFloat,
             onMotivationChange = { motivationFloat = it }
-        ) }
+        )
+        }
     }
 }
 
@@ -108,4 +96,3 @@ fun ActionButton(
         )
     }
 }
-
