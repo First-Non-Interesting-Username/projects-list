@@ -23,8 +23,8 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
         title: String,
         description: String = "",
         link: String,
-        priority: Int,
-        motivation: Int
+        priority: Float,
+        motivation: Float
     ) {
         repository.addProject(
             Project(

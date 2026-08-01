@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.ui.components.ProjectDisplayColumn
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectEditingColumn
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +60,14 @@ fun NewProjectScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
+        ProjectDisplayColumn(
+            nameValue = "Name",
+            descriptionValue = "Description",
+            linkValue = "https://example.com",
+            priorityValue = 0f,
+            motivationValue = 0f,
+            modifier = Modifier.padding(innerPadding)
+        )
         ProjectEditingColumn(
             modifier = Modifier.padding(innerPadding),
             nameValue = name,

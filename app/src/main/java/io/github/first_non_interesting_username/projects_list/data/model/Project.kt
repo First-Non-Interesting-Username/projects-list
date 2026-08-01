@@ -12,11 +12,11 @@ data class Project(
     val link: String,
     val tasks: List<Task> = emptyList(),
     val createdAt: Long = System.currentTimeMillis(),
-    val priority: Int,
-    val motivation: Int,
+    val priority: Float,
+    val motivation: Float,
 ) {
     init {
-        require(priority in 0..10) { "priority must be 0–10, got $priority" }
-        require(motivation in 0..10) { "motivation must be 0–10, got $motivation" }
+        require(priority in 0f..10f) { "priority must be 0–10, got $priority" }
+        require(motivation in 0f..10f) { "motivation must be 0–10, got $motivation" }
     }
 }
