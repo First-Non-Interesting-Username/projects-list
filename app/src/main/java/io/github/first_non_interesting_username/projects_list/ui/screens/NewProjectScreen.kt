@@ -1,5 +1,6 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,6 +61,7 @@ fun NewProjectScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
+        Column() {
         ProjectDisplayColumn(
             nameValue = "Name",
             descriptionValue = "Description",
@@ -80,7 +82,7 @@ fun NewProjectScreen(navController: NavHostController) {
             onPriorityChange = { priorityFloat = it },
             motivation = motivationFloat,
             onMotivationChange = { motivationFloat = it }
-        )
+        ) }
     }
 }
 

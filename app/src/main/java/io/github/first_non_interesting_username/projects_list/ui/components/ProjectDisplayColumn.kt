@@ -13,8 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -32,22 +34,30 @@ fun ProjectDisplayColumn(
                 .fillMaxSize()
                 .padding(4.dp),
         ) ) {
-        Box(
+        Surface(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .height(56.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .height(56.dp),
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            tonalElevation = 2.dp,
+            shadowElevation = 4.dp
         ) {
-            Text(
-                text = nameValue,
+            Box(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(horizontal = 16.dp),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                    .fillMaxWidth()
+                    .height(56.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = nameValue,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
-
     }
 }
