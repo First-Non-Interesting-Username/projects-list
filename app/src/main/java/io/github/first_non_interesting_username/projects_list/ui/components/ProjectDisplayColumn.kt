@@ -45,7 +45,9 @@ fun ProjectDisplayColumn(
         MyTextField(
             modifier = Modifier.fillMaxWidth(0.9f),
             value = descriptionValue,
-            label = "Description"
+            label = "Description",
+            textMinLines = 3,
+            textMaxLines = 6,
         )
     }
 }
@@ -54,14 +56,16 @@ fun ProjectDisplayColumn(
 fun MyTextField(
     value: String,
     label: String,
-    modifier: Modifier
+    modifier: Modifier,
+    textMinLines: Int = 1,
+    textMaxLines: Int = maxOf(textMinLines or 1),
 ) {
     Box(modifier = modifier) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .height(56.dp),
+                .heightIn(56.dp),
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -75,8 +79,9 @@ fun MyTextField(
                 Text(
                     text = value,
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    maxLines = 1,
+                    modifier = Modifier.padding(16.dp),
+                    maxLines = textMaxLines,
+                    minLines = textMinLines,
                     overflow = TextOverflow.Ellipsis
                 )
             }
