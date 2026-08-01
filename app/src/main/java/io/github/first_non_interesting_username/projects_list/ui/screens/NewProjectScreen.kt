@@ -71,9 +71,9 @@ fun NewProjectScreen(navController: NavHostController) {
             onDescriptionValueChange = { description = it },
             linkValue = link,
             onLinkValueChange = { link = it },
-            priority = priorityFloat,
+            priorityValue = priorityFloat,
             onPriorityChange = { priorityFloat = it },
-            motivation = motivationFloat,
+            motivationValue = motivationFloat,
             onMotivationChange = { motivationFloat = it }
         )
         }

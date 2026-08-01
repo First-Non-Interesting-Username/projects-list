@@ -22,9 +22,9 @@ fun ProjectEditingColumn(
     onDescriptionValueChange: (String) -> Unit,
     linkValue: String,
     onLinkValueChange: (String) -> Unit,
-    priority: Float,
+    priorityValue: Float,
     onPriorityChange: (Float) -> Unit,
-    motivation: Float,
+    motivationValue: Float,
     onMotivationChange: (Float) -> Unit,
 )
 {
@@ -68,7 +68,7 @@ fun ProjectEditingColumn(
         )
         Spacer(Modifier.height(8.dp))
         SliderWithDescription(
-            value = priority,
+            value = priorityValue,
             onValueChange = onPriorityChange,
             text = "Priority",
             modifier = Modifier
@@ -84,7 +84,7 @@ fun ProjectEditingColumn(
         )
         Spacer(Modifier.height(8.dp))
         SliderWithDescription(
-            value = motivation,
+            value = motivationValue,
             onValueChange = onMotivationChange,
             text = "Motivation",
             modifier = Modifier
