@@ -1,4 +1,4 @@
-package io.github.first_non_interesting_username.projects_list.app.ui.viewmodel
+package io.github.first_non_interesting_username.projects_list.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +24,8 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
         description: String = "",
         link: String,
         priority: Float,
-        motivation: Float
+        motivation: Float,
+        favourite: Boolean = false
     ) {
         repository.addProject(
             Project(
@@ -34,6 +35,7 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
                 link = link,
                 priority = priority,
                 motivation = motivation,
+                favourite = favourite
             )
         )
     }

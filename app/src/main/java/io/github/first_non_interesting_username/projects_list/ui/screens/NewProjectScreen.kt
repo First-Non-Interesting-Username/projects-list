@@ -23,12 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectEditingColumn
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewProjectScreen(navController: NavHostController) {
+fun NewProjectScreen(
+    navController: NavHostController,
+    viewModel: ProjectViewModel
+) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
     var name by remember { mutableStateOf("") }
@@ -54,16 +58,14 @@ fun NewProjectScreen(navController: NavHostController) {
                 },
                 actions = {
                     if (favourite) {
-                        IconButton(onClick = {favourite = !favourite}) {
+                        IconButton(onClick = { favourite = !favourite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_filled_star),
                                 contentDescription = "Mark $name as not favourite"
                             )
                         }
-                    }
-
-                    else {
-                        IconButton(onClick = {favourite = !favourite}) {
+                    } else {
+                        IconButton(onClick = { favourite = !favourite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_star),
                                 contentDescription = "Mark $name as favourite"
@@ -75,26 +77,42 @@ fun NewProjectScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             ActionButton(
-                onClick = {},
+                onClick = {
+                    if (name.isNotBlank()) {
+                        val nextChronology = viewModel.projects.value.size + 1
+
+                        viewModel.addProject(
+                            chronology = nextChronology,
+                            title = name,
+                            description = description,
+                            link = link,
+                            priority = priorityFloat,
+                            motivation = motivationFloat,
+                            favourite = favourite
+                        )
+
+                        navController.popBackStack()
+                    }
+                },
                 icon = painterResource(R.drawable.ic_add_task),
                 contentDescription = "Add the project",
             )
         }
     ) { innerPadding ->
         Column(Modifier.verticalScroll(rememberScrollState())) {
-        ProjectEditingColumn(
-            modifier = Modifier.padding(innerPadding),
-            nameValue = name,
-            onNameValueChange = { name = it },
-            descriptionValue = description,
-            onDescriptionValueChange = { description = it },
-            linkValue = link,
-            onLinkValueChange = { link = it },
-            priorityValue = priorityFloat,
-            onPriorityChange = { priorityFloat = it },
-            motivationValue = motivationFloat,
-            onMotivationChange = { motivationFloat = it }
-        )
+            ProjectEditingColumn(
+                modifier = Modifier.padding(innerPadding),
+                nameValue = name,
+                onNameValueChange = { name = it },
+                descriptionValue = description,
+                onDescriptionValueChange = { description = it },
+                linkValue = link,
+                onLinkValueChange = { link = it },
+                priorityValue = priorityFloat,
+                onPriorityChange = { priorityFloat = it },
+                motivationValue = motivationFloat,
+                onMotivationChange = { motivationFloat = it }
+            )
         }
     }
 }

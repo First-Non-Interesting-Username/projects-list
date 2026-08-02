@@ -20,6 +20,8 @@ import io.github.first_non_interesting_username.projects_list.ui.screens.Prototy
 import io.github.first_non_interesting_username.projects_list.ui.screens.SettingsScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.TaskScreen
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun AppNavigation() {
         val navController = rememberNavController()
+        val viewModel: ProjectViewModel = viewModel(factory = ProjectViewModel.Factory)
 
         NavHost(
             navController = navController,
@@ -44,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 PrototypeScreen(navController)
             }
             composable(Routes.HOME) {
-                HomeScreen(navController)
+                HomeScreen(navController, viewModel)
             }
             composable(Routes.SETTINGS) {
                 SettingsScreen(navController)
@@ -56,7 +59,7 @@ class MainActivity : ComponentActivity() {
                 LicensesScreen(navController)
             }
             composable(Routes.NEW_PROJECT) {
-                NewProjectScreen(navController)
+                NewProjectScreen(navController, viewModel)
             }
             composable(Routes.PROJECT) {
                 ProjectScreen(navController)

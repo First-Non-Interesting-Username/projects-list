@@ -34,9 +34,20 @@ import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.Routes
 import io.github.first_non_interesting_username.projects_list.ui.components.AppBottomBar
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.collectAsState
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
+import io.github.first_non_interesting_username.projects_list.ui.components.ProjectRow
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(
+    navController: NavHostController,
+    viewModel: ProjectViewModel
+) {
+    val projects by viewModel.projects.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -45,15 +56,40 @@ fun HomeScreen(navController: NavHostController) {
                 onAboutClick = { navController.navigate(Routes.ABOUT) },
             )
         },
-        bottomBar = {AppBottomBar(navController)}
+        bottomBar = { AppBottomBar(navController) }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(4.dp),
-        ) {
-            ColorSchemePreview()
+        if (projects.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text("No projects yet! Tap the + icon below to add one.")
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(projects) { project ->
+                    ProjectRow(
+                        name = project.title,
+                        isFavourite = project.favourite,
+                        priority = project.priority,
+                        motivation = project.motivation,
+                        chronology = project.chronology,
+                        onClick = {
+                        }
+                    )
+                }
+            }
         }
     }
 }
