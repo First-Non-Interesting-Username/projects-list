@@ -1,6 +1,5 @@
 package io.github.first_non_interesting_username.projects_list.ui.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -13,28 +12,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import io.github.first_non_interesting_username.projects_list.R
 
-enum class Destination(
-    val route: String,
-    val label: String,
-    @DrawableRes val iconRes: Int,
-) {
-    SEARCH(
-        route = "search",
-        label = "Search projects",
-        iconRes = R.drawable.ic_search,
-    ),
-    ADD(
-        route = "new_project",
-        label = "New project",
-        iconRes = R.drawable.ic_add,
-    ),
-    RANDOM(
-        route = "random",
-        label = "Random project",
-        iconRes = R.drawable.ic_casino,
-    ),
-}
-
 @Composable
 fun AppBottomBar(
     navController: NavHostController,
@@ -45,26 +22,62 @@ fun AppBottomBar(
     NavigationBar(
         modifier = modifier
     ) {
-        Destination.entries.forEach { destination ->
-            NavigationBarItem(
-                selected = currentRoute == destination.route,
-                onClick = {
-                    navController.navigate(destination.route) {
-                        launchSingleTop = true
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        restoreState = true
+        NavigationBarItem(
+            selected = currentRoute == "search",
+            onClick = {
+                navController.navigate("search") {
+                    launchSingleTop = true
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(destination.iconRes),
-                        contentDescription = destination.label,
-                    )
-                },
-                label = { Text(destination.label) },
-            )
-        }
+                    restoreState = true
+                }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_search),
+                    contentDescription = "Search projects",
+                )
+            },
+            label = { Text("Search projects") },
+        )
+        NavigationBarItem(
+            selected = currentRoute == "new_project",
+            onClick = {
+                navController.navigate("new_project") {
+                    launchSingleTop = true
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    restoreState = true
+                }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_add),
+                    contentDescription = "New project",
+                )
+            },
+            label = { Text("New project") },
+        )
+        NavigationBarItem(
+            selected = currentRoute == "random",
+            onClick = {
+                navController.navigate("random") {
+                    launchSingleTop = true
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    restoreState = true
+                }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_casino),
+                    contentDescription = "Random project",
+                )
+            },
+            label = { Text("Random project") },
+        )
     }
 }

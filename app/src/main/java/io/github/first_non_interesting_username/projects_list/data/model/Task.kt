@@ -14,6 +14,8 @@ data class Task(
     val finished: Boolean = false,
     val favorite: Boolean = false,
 ) {
+    val score: Int
+        get() = motivation.toInt() * priority.toInt()
     init {
         require(priority in 0f..10f) { "priority must be 0–10, got $priority" }
         require(motivation in 0f..10f) { "motivation must be 0–10, got $motivation" }
