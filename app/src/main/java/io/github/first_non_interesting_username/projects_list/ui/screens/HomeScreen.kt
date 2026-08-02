@@ -86,6 +86,7 @@ fun HomeScreen(
                         motivation = project.motivation,
                         chronology = project.chronology,
                         onClick = {
+                            navController.navigate(Routes.projectRoute(project.uuid))
                         }
                     )
                 }

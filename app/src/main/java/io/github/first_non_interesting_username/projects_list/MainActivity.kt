@@ -5,9 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import io.github.first_non_interesting_username.projects_list.ui.screens.AboutScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.EditProjectScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.EditTaskScreen
@@ -61,8 +63,15 @@ class MainActivity : ComponentActivity() {
             composable(Routes.NEW_PROJECT) {
                 NewProjectScreen(navController, viewModel)
             }
-            composable(Routes.PROJECT) {
-                ProjectScreen(navController)
+            composable(
+                route = Routes.PROJECT_ROUTE,
+                arguments = listOf(navArgument(Routes.PROJECT_ID_ARG) { type = NavType.StringType })
+            ) { backStackEntry ->
+                ProjectScreen(
+                    navController = navController,
+                    viewModel = viewModel,
+                    projectId = backStackEntry.arguments?.getString(Routes.PROJECT_ID_ARG),
+                )
             }
             composable(Routes.EDIT_PROJECT) {
                 EditProjectScreen(navController)

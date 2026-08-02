@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,20 +33,28 @@ import io.github.first_non_interesting_username.projects_list.ui.components.Acti
 import io.github.first_non_interesting_username.projects_list.ui.components.AlertDialogExample
 import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectDisplayColumn
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectScreen(navController: NavHostController) {
-    var priorityFloat by remember { mutableFloatStateOf(0f) }
-    var motivationFloat by remember { mutableFloatStateOf(0f) }
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var link by remember { mutableStateOf("") }
-    var finished by remember { mutableStateOf(false) }
+fun ProjectScreen(
+    navController: NavHostController,
+    viewModel: ProjectViewModel,
+    projectId: String?,
+) {
+    val projects by viewModel.projects.collectAsState()
+    val project = projects.find { it.uuid == projectId }
+
+    var priorityFloat by remember(projectId) { mutableFloatStateOf(project?.priority ?: 0f) }
+    var motivationFloat by remember(projectId) { mutableFloatStateOf(project?.motivation ?: 0f) }
+    var name by remember(projectId) { mutableStateOf(project?.title ?: "") }
+    var description by remember(projectId) { mutableStateOf(project?.description ?: "") }
+    var link by remember(projectId) { mutableStateOf(project?.link ?: "") }
+    var finished by remember(projectId) { mutableStateOf(project?.finished ?: false) }
     var confirmationDialog by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var deletionDialog by remember { mutableStateOf(false) }
-    var favourite by remember { mutableStateOf(false) }
+    var favourite by remember(projectId) { mutableStateOf(project?.favourite ?: false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
