@@ -81,7 +81,7 @@ fun HomeScreen(
                 items(projects) { project ->
                     ProjectRow(
                         name = project.title,
-                        isFavourite = project.favourite,
+                        isFavorite = project.favorite,
                         priority = project.priority,
                         motivation = project.motivation,
                         chronology = project.chronology,

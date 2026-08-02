@@ -38,7 +38,7 @@ fun NewProjectScreen(
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var link by remember { mutableStateOf("") }
-    var favourite by remember { mutableStateOf(false) }
+    var favorite by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -57,18 +57,18 @@ fun NewProjectScreen(
                     }
                 },
                 actions = {
-                    if (favourite) {
-                        IconButton(onClick = { favourite = !favourite }) {
+                    if (favorite) {
+                        IconButton(onClick = { favorite = !favorite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_filled_star),
-                                contentDescription = "Mark $name as not favourite"
+                                contentDescription = "Mark $name as not favorite"
                             )
                         }
                     } else {
-                        IconButton(onClick = { favourite = !favourite }) {
+                        IconButton(onClick = { favorite = !favorite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_star),
-                                contentDescription = "Mark $name as favourite"
+                                contentDescription = "Mark $name as favorite"
                             )
                         }
                     }
@@ -88,7 +88,7 @@ fun NewProjectScreen(
                             link = link,
                             priority = priorityFloat,
                             motivation = motivationFloat,
-                            favourite = favourite
+                            favorite = favorite
                         )
 
                         navController.popBackStack()

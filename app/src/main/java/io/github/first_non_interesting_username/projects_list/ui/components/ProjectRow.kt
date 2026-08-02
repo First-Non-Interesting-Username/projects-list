@@ -21,7 +21,7 @@ import io.github.first_non_interesting_username.projects_list.R
 @Composable
 fun ProjectRow(
     name: String,
-    isFavourite: Boolean,
+    isFavorite: Boolean,
     modifier: Modifier = Modifier.Companion,
     priority: Float,
     motivation: Float,
@@ -62,15 +62,15 @@ fun ProjectRow(
             text = "Pri: $priority/10",
             style = MaterialTheme.typography.bodyMedium
         )
-        if (isFavourite) {
+        if (isFavorite) {
             Icon(
                 painter = painterResource(R.drawable.ic_filled_star),
-                contentDescription = "$name is marked as favourite",
+                contentDescription = "$name is marked as favorite",
             )
         } else {
             Icon(
                 painter = painterResource(R.drawable.ic_star),
-                contentDescription = "$name is not marked as favourite"
+                contentDescription = "$name is not marked as favorite"
             )
         }
     }

@@ -25,7 +25,7 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
         link: String,
         priority: Float,
         motivation: Float,
-        favourite: Boolean = false
+        favorite: Boolean = false
     ) {
         repository.addProject(
             Project(
@@ -35,7 +35,7 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
                 link = link,
                 priority = priority,
                 motivation = motivation,
-                favourite = favourite
+                favorite = favorite
             )
         )
     }
