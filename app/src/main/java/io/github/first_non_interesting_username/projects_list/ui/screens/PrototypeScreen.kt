@@ -1,11 +1,9 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
-import androidx.appcompat.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,10 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import io.github.first_non_interesting_username.projects_list.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,9 +29,9 @@ fun PrototypeScreen(navController: NavHostController) {
             name = "Name",
             isFavourite = false,
             modifier = Modifier.padding(innerPadding),
-            priority = TODO(),
-            motivation = TODO(),
-            chronology = TODO()
+            priority = 1f,
+            motivation = 1f,
+            chronology = 1
         )
     }
 }
@@ -42,49 +40,56 @@ fun PrototypeScreen(navController: NavHostController) {
 fun ProjectRow(
     name: String,
     isFavourite: Boolean,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     priority: Float,
     motivation: Float,
     chronology: Int,
+    onClick: () -> Unit = {},
 ) {
-    Box(
+    val motivation = motivation.toInt()
+    val priority = priority.toInt()
+
+    Row(
         modifier = modifier.then(
-            Modifier.fillMaxSize())
-        ,
-        contentAlignment = Alignment.Center
-    ) {
-        Row(
-            modifier = Modifier
+            Modifier
                 .fillMaxWidth(0.9f)
                 .height(64.dp)
                 .background(
                     color = MaterialTheme.colorScheme.primaryContainer,
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "#$chronology"
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    onClick()
+                }),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "#$chronology"
+        )
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Text(
+            text = "Mot: $motivation/10",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            text = "Pri: $priority/10",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        if (isFavourite) {
+            Icon(
+                painter = painterResource(R.drawable.ic_filled_star),
+                contentDescription = "$name is marked as favourite",
             )
-            Text(
-                text = name,
-                style = MaterialTheme.typography.bodyLarge
+        } else {
+            Icon(
+                painter = painterResource(R.drawable.ic_star),
+                contentDescription = "$name is not marked as favourite"
             )
-            Text(
-                text = "$motivation/10",
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
-                text = "$priority/10",
-                style = MaterialTheme.typography.bodyLarge
-            )
-            if (isFavourite) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_filled_star),
-                )
-            }
         }
     }
 }
