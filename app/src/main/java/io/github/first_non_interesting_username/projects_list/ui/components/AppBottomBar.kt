@@ -15,6 +15,7 @@ import io.github.first_non_interesting_username.projects_list.R
 @Composable
 fun AppBottomBar(
     navController: NavHostController,
+
     modifier: Modifier = Modifier.Companion,
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
