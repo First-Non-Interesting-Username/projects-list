@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,25 +29,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.Routes
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.AlertDialogExample
 import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectEditingColumn
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProjectScreen(navController: NavHostController) {
-    var priorityFloat by remember { mutableFloatStateOf(0f) }
-    var motivationFloat by remember { mutableFloatStateOf(0f) }
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var link by remember { mutableStateOf("") }
-    var finished by remember { mutableStateOf(false) }
+fun EditProjectScreen(
+    navController: NavHostController,
+    viewModel: ProjectViewModel,
+    projectId: String?,
+) {
+    val projects by viewModel.projects.collectAsState()
+    val project = projects.find { it.uuid == projectId }
+
+    var priorityFloat by remember(projectId) { mutableFloatStateOf(project?.priority ?: 0f) }
+    var motivationFloat by remember(projectId) { mutableFloatStateOf(project?.motivation ?: 0f) }
+    var name by remember(projectId) { mutableStateOf(project?.title ?: "") }
+    var description by remember(projectId) { mutableStateOf(project?.description ?: "") }
+    var link by remember(projectId) { mutableStateOf(project?.link ?: "") }
+    var finished by remember(projectId) { mutableStateOf(project?.finished ?: false) }
     var confirmationDialog by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var deletionDialog by remember { mutableStateOf(false) }
-    var favourite by remember { mutableStateOf(false) }
+    var favourite by remember(projectId) { mutableStateOf(project?.favourite ?: false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -66,16 +76,14 @@ fun EditProjectScreen(navController: NavHostController) {
                 },
                 actions = {
                     if (favourite) {
-                        IconButton(onClick = {favourite = !favourite}) {
+                        IconButton(onClick = { favourite = !favourite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_filled_star),
                                 contentDescription = "Mark $name as not favourite"
                             )
                         }
-                    }
-
-                    else {
-                        IconButton(onClick = {favourite = !favourite}) {
+                    } else {
+                        IconButton(onClick = { favourite = !favourite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_star),
                                 contentDescription = "Mark $name as favourite"
@@ -105,7 +113,9 @@ fun EditProjectScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             ActionButton(
-                onClick = {},
+                onClick = {
+                    project?.let { navController.navigate(Routes.projectRoute(it.uuid)) }
+                },
                 icon = painterResource(R.drawable.ic_exit_to_app),
                 contentDescription = "Finish editing",
             )
@@ -119,11 +129,11 @@ fun EditProjectScreen(navController: NavHostController) {
                 linkValue = link,
                 priorityValue = priorityFloat,
                 motivationValue = motivationFloat,
-                onNameValueChange = {name = it},
-                onDescriptionValueChange = {description = it},
-                onLinkValueChange = {link = it},
-                onPriorityChange = {priorityFloat = it},
-                onMotivationChange = {motivationFloat = it},
+                onNameValueChange = { name = it },
+                onDescriptionValueChange = { description = it },
+                onLinkValueChange = { link = it },
+                onPriorityChange = { priorityFloat = it },
+                onMotivationChange = { motivationFloat = it },
             )
             Spacer(Modifier.height(8.dp))
             ConfirmationButton(
@@ -131,7 +141,7 @@ fun EditProjectScreen(navController: NavHostController) {
                 text = "Mark as finished",
                 clickedText = "Mark as unfinished",
                 contentDescription = "Toggle state of completion of the project",
-                onClick = { confirmationDialog= !confirmationDialog },
+                onClick = { confirmationDialog = !confirmationDialog },
                 clicked = finished
             )
         }
