@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
         NavHost(
             navController = navController,
-            startDestination = Routes.PROTOTYPE,
+            startDestination = Routes.PROJECT,
         ) {
             composable(Routes.PROTOTYPE) {
                 PrototypeScreen(navController)

@@ -12,13 +12,5 @@ import io.github.first_non_interesting_username.projects_list.ui.components.Proj
 @Composable
 fun PrototypeScreen(navController: NavHostController) {
     Scaffold { innerPadding ->
-        ProjectRow(
-            name = "Name",
-            isFavourite = false,
-            modifier = Modifier.padding(innerPadding),
-            priority = 1f,
-            motivation = 1f,
-            chronology = 1
-        )
     }
 }

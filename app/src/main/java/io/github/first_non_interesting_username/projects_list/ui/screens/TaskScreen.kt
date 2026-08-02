@@ -45,6 +45,7 @@ fun TaskScreen(navController: NavHostController) {
     var confirmationDialog by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var deletionDialog by remember { mutableStateOf(false) }
+    var favourite by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -63,6 +64,23 @@ fun TaskScreen(navController: NavHostController) {
                     }
                 },
                 actions = {
+                    if (favourite) {
+                        IconButton(onClick = {favourite = !favourite}) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_filled_star),
+                                contentDescription = "Mark $name as not favourite"
+                            )
+                        }
+                    }
+
+                    else {
+                        IconButton(onClick = {favourite = !favourite}) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_star),
+                                contentDescription = "Mark $name as favourite"
+                            )
+                        }
+                    }
                     IconButton(onClick = { expanded = !expanded }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_more_vert),

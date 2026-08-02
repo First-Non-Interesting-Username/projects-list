@@ -34,6 +34,7 @@ fun NewProjectScreen(navController: NavHostController) {
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var link by remember { mutableStateOf("") }
+    var favourite by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -51,6 +52,25 @@ fun NewProjectScreen(navController: NavHostController) {
                         )
                     }
                 },
+                actions = {
+                    if (favourite) {
+                        IconButton(onClick = {favourite = !favourite}) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_filled_star),
+                                contentDescription = "Mark $name as not favourite"
+                            )
+                        }
+                    }
+
+                    else {
+                        IconButton(onClick = {favourite = !favourite}) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_star),
+                                contentDescription = "Mark $name as favourite"
+                            )
+                        }
+                    }
+                }
             )
         },
         floatingActionButton = {

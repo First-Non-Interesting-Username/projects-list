@@ -54,7 +54,7 @@ fun ProjectDisplayColumn(
                 .align(Alignment.CenterHorizontally),
             value = linkValue,
             label = "Link",
-            onClick = {context.openUrl("example.com")}
+            onClick = {context.openUrl(linkValue)}
         )
         Spacer(Modifier.height(8.dp))
         SliderWithDescription(
