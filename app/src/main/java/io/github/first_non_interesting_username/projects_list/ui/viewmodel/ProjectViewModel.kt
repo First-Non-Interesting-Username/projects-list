@@ -19,7 +19,6 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
     val projects: StateFlow<List<Project>> = repository.projects
 
     fun addProject(
-        chronology: Int,
         title: String,
         description: String = "",
         link: String,
@@ -27,9 +26,10 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
         motivation: Float,
         favorite: Boolean = false
     ) {
+        val nextChronology = (projects.value.maxOfOrNull { it.chronology } ?: 0) + 1
         repository.addProject(
             Project(
-                chronology = chronology,
+                chronology = nextChronology,
                 title = title,
                 description = description,
                 link = link,

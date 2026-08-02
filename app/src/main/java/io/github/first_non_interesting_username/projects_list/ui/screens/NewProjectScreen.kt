@@ -79,10 +79,8 @@ fun NewProjectScreen(
             ActionButton(
                 onClick = {
                     if (name.isNotBlank()) {
-                        val nextChronology = viewModel.projects.value.size + 1
 
                         viewModel.addProject(
-                            chronology = nextChronology,
                             title = name,
                             description = description,
                             link = link,
