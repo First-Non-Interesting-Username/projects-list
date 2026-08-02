@@ -57,6 +57,12 @@ fun ProjectScreen(
     var deletionDialog by remember { mutableStateOf(false) }
     var favorite by remember(projectId) { mutableStateOf(project?.favorite ?: false) }
 
+    val toggleFavourite: () -> Unit = {
+        favorite = !favorite
+        project?.let { viewModel.updateProject(it.copy(favorite = favorite)) }
+    }
+
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -75,16 +81,14 @@ fun ProjectScreen(
                 },
                 actions = {
                     if (favorite) {
-                        IconButton(onClick = {favorite = !favorite}) {
+                        IconButton(onClick = { toggleFavourite() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_filled_star),
                                 contentDescription = "Mark $name as not favorite"
                             )
                         }
-                    }
-
-                    else {
-                        IconButton(onClick = {favorite = !favorite}) {
+                    } else {
+                        IconButton(onClick = { toggleFavourite() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_star),
                                 contentDescription = "Mark $name as favorite"
@@ -147,6 +151,7 @@ fun ProjectScreen(
                 onConfirmation = {
                     confirmationDialog = !confirmationDialog
                     finished = !finished
+                    project?.let { viewModel.updateProject(it.copy(finished = finished)) }
                 },
                 dialogTitle = if (!finished) {
                     "Mark as finished"
@@ -166,6 +171,12 @@ fun ProjectScreen(
                 onDismissRequest = { deletionDialog = !deletionDialog },
                 onConfirmation = {
                     deletionDialog = !deletionDialog
+                    projectId?.let { viewModel.deleteProject(it) }
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.HOME) {
+                            inclusive = false
+                        }
+                    }
                 },
                 dialogTitle = "Delete $name",
                 dialogText = """

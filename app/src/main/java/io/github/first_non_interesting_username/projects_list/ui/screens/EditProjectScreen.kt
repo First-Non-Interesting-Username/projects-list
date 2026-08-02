@@ -58,6 +58,27 @@ fun EditProjectScreen(
     var deletionDialog by remember { mutableStateOf(false) }
     var favorite by remember(projectId) { mutableStateOf(project?.favorite ?: false) }
 
+    val saveEdits: () -> Unit = {
+        project?.let {
+            viewModel.updateProject(
+                it.copy(
+                    title = name,
+                    description = description,
+                    link = link,
+                    priority = priorityFloat,
+                    motivation = motivationFloat,
+                    finished = finished,
+                    favorite = favorite,
+                )
+            )
+        }
+    }
+
+    val toggleFavourite: () -> Unit = {
+        favorite = !favorite
+        project?.let { viewModel.updateProject(it.copy(favorite = favorite)) }
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -67,7 +88,10 @@ fun EditProjectScreen(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                        saveEdits()
+                    }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back),
                             contentDescription = "Back",
@@ -76,14 +100,14 @@ fun EditProjectScreen(
                 },
                 actions = {
                     if (favorite) {
-                        IconButton(onClick = { favorite = !favorite }) {
+                        IconButton(onClick = { toggleFavourite() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_filled_star),
                                 contentDescription = "Mark $name as not favorite"
                             )
                         }
                     } else {
-                        IconButton(onClick = { favorite = !favorite }) {
+                        IconButton(onClick = { toggleFavourite() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_star),
                                 contentDescription = "Mark $name as favorite"
@@ -114,7 +138,8 @@ fun EditProjectScreen(
         floatingActionButton = {
             ActionButton(
                 onClick = {
-                    project?.let { navController.navigate(Routes.projectRoute(it.uuid)) }
+                    saveEdits()
+                    navController.popBackStack()
                 },
                 icon = painterResource(R.drawable.ic_exit_to_app),
                 contentDescription = "Finish editing",
@@ -151,6 +176,7 @@ fun EditProjectScreen(
                 onConfirmation = {
                     confirmationDialog = !confirmationDialog
                     finished = !finished
+                    project?.let { viewModel.updateProject(it.copy(finished = finished)) }
                 },
                 dialogTitle = if (!finished) {
                     "Mark as finished"
@@ -170,6 +196,12 @@ fun EditProjectScreen(
                 onDismissRequest = { deletionDialog = !deletionDialog },
                 onConfirmation = {
                     deletionDialog = !deletionDialog
+                    projectId?.let { viewModel.deleteProject(it) }
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.HOME) {
+                            inclusive = false
+                        }
+                    }
                 },
                 dialogTitle = "Delete $name",
                 dialogText = """

@@ -40,6 +40,8 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
         )
     }
 
+    fun updateProject(updated: Project) = repository.updateProject(updated)
+
     fun deleteProject(uuid: String) = repository.deleteProject(uuid)
 
     fun addTask(projectUuid: String, task: Task) {
