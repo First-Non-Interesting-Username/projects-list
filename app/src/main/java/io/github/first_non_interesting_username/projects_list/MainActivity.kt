@@ -16,6 +16,7 @@ import io.github.first_non_interesting_username.projects_list.ui.screens.License
 import io.github.first_non_interesting_username.projects_list.ui.screens.NewProjectScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.NewTaskScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.ProjectScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.PrototypeScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SettingsScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.TaskScreen
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
@@ -37,8 +38,11 @@ class MainActivity : ComponentActivity() {
 
         NavHost(
             navController = navController,
-            startDestination = Routes.HOME,
+            startDestination = Routes.PROTOTYPE,
         ) {
+            composable(Routes.PROTOTYPE) {
+                PrototypeScreen(navController)
+            }
             composable(Routes.HOME) {
                 HomeScreen(navController)
             }
@@ -67,7 +71,8 @@ class MainActivity : ComponentActivity() {
                 TaskScreen(navController)
             }
             composable(Routes.EDIT_TASK) {
-                EditTaskScreen(navController)
+                EditTaskScreen(navController
+                )
             }
         }
     }
