@@ -65,13 +65,13 @@ fun HomeScreen(
         },
         bottomBar = {
             AppBottomBar(
-                navController,
                 content = "project",
+                onSearchClick = {},
+                onAddClick = { navController.navigate("new_project") },
                 onRandomClick = {
                     if (randomProject == null) {
                         noProjectsDialog = !noProjectsDialog
-                    }
-                    else {
+                    } else {
                         navController.navigate(Routes.projectRoute(randomProject.uuid))
                     }
                 },
@@ -113,7 +113,7 @@ fun HomeScreen(
             }
         }
         if (noProjectsDialog) {
-            MinimalDialog(onDismissRequest = {noProjectsDialog = !noProjectsDialog})
+            MinimalDialog(onDismissRequest = { noProjectsDialog = !noProjectsDialog })
         }
     }
 }

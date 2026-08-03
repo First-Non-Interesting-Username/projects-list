@@ -15,7 +15,6 @@ object Routes {
     const val NEW_TASK = "new_task"
     const val TASK = "task"
     const val EDIT_TASK = "edit_task"
-
     fun projectRoute(projectId: String) = "$PROJECT/$projectId"
     fun editProjectRoute(projectId: String) = "$EDIT_PROJECT/$projectId"
 }

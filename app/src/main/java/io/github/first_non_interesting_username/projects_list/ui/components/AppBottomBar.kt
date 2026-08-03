@@ -15,20 +15,20 @@ import java.security.KeyStore
 
 @Composable
 fun AppBottomBar(
-    navController: NavHostController,
     content: String,
+    onSearchClick: () -> Unit,
+    onAddClick: () -> Unit,
     onRandomClick: () -> Unit,
     modifier: Modifier = Modifier.Companion,
 ) {
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     NavigationBar(
         modifier = modifier
     ) {
         NavigationBarItem(
-            selected = currentRoute == "search",
+            selected = false,
             onClick = {
-                navController.navigate("search")
+                onSearchClick()
             },
             icon = {
                 Icon(
@@ -39,9 +39,9 @@ fun AppBottomBar(
             label = { Text("Search ${content}s") },
         )
         NavigationBarItem(
-            selected = currentRoute == "new_${content}",
+            selected = false,
             onClick = {
-                navController.navigate("new_${content}")
+                onAddClick()
             },
             icon = {
                 Icon(
