@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
             }
             composable(Routes.SEARCH) {
                 SearchScreen(
-                    navController,
+                    navController = navController,
                     viewModel = viewModel,
                 )
             }
