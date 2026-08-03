@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,10 +20,10 @@ import io.github.first_non_interesting_username.projects_list.ui.screens.NewProj
 import io.github.first_non_interesting_username.projects_list.ui.screens.NewTaskScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.ProjectScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.PrototypeScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.SearchScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SettingsScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.TaskScreen
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 class MainActivity : ComponentActivity() {
@@ -90,7 +91,14 @@ class MainActivity : ComponentActivity() {
                 TaskScreen(navController)
             }
             composable(Routes.EDIT_TASK) {
-                EditTaskScreen(navController
+                EditTaskScreen(
+                    navController
+                )
+            }
+            composable(Routes.SEARCH) {
+                SearchScreen(
+                    navController,
+                    viewModel = viewModel,
                 )
             }
         }

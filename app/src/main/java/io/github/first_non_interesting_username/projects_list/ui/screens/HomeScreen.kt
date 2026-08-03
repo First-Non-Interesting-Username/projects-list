@@ -66,7 +66,9 @@ fun HomeScreen(
         bottomBar = {
             AppBottomBar(
                 content = "project",
-                onSearchClick = {},
+                onSearchClick = {
+                    navController.navigate("search")
+                },
                 onAddClick = { navController.navigate("new_project") },
                 onRandomClick = {
                     if (randomProject == null) {
