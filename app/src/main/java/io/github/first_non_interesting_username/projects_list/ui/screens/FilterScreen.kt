@@ -1,6 +1,6 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
-import android.widget.Space
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,21 +20,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleTopBar
 import kotlin.math.roundToInt
-import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterScreen(navController: NavHostController) {
 
+    var one by remember { mutableStateOf(false) }
+    var two by remember { mutableStateOf(false) }
 
 
     Scaffold(
@@ -73,11 +72,22 @@ fun FilterScreen(navController: NavHostController) {
                 name = "Priority"
             )
             Spacer(modifier = Modifier.height(8.dp))
-            DoubleCheckboxRow(
-                firstName = "favorite",
-                firstValue = false,
-                secondValue = false,
-                secondName = "non favorite",
+            TwoToggleRow(
+                desc1 = "favorite",
+                checked1 = one,
+                onToggle1 = {one = !one},
+                desc2 = "non favorite",
+                checked2 = two,
+                onToggle2 = {two = !two},
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TwoToggleRow(
+                desc1 = "unfinished",
+                checked1 = one,
+                onToggle1 = {one = !one},
+                desc2 = "finished",
+                checked2 = two,
+                onToggle2 = {two = !two},
             )
         }
     }
@@ -120,31 +130,37 @@ fun RangeSliderWithDescription(
 }
 
 @Composable
-fun DoubleCheckboxRow(
-    firstValue: Boolean,
-    firstName: String,
-    secondValue: Boolean,
-    secondName: String,
+fun LabeledSwitch(
+    description: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    var firstChecked by remember { mutableStateOf(value = firstValue) }
-    var secondChecked by remember { mutableStateOf(value = secondValue) }
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(description)
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
+    }
+}
 
+@Composable
+fun TwoToggleRow(
+    desc1: String,
+    checked1: Boolean,
+    onToggle1: (Boolean) -> Unit,
+    desc2: String,
+    checked2: Boolean,
+    onToggle2: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(
+            space = 24.dp,
+            alignment = Alignment.CenterHorizontally,
+        ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Checkbox(
-            checked = firstChecked,
-            onCheckedChange = { firstChecked = it }
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(text = firstName)
-        Spacer(Modifier.width(8.dp))
-        Checkbox(
-            checked = secondChecked,
-            onCheckedChange = { secondChecked = it }
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(text = secondName)
+        LabeledSwitch(desc1, checked1, onToggle1)
+        LabeledSwitch(desc2, checked2, onToggle2)
     }
 }
