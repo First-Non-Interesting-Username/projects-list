@@ -19,10 +19,10 @@ import kotlin.math.roundToInt
 fun FilterScreen(navController: NavHostController) {
     var motivation by remember { mutableStateOf(0f..10f) }
     var priority by remember { mutableStateOf(0f..10f) }
-    var favorite by remember { mutableStateOf(false) }
-    var nonFavorite by remember { mutableStateOf(false) }
-    var unfinished by remember { mutableStateOf(false) }
-    var finished by remember { mutableStateOf(false) }
+    var favorite by remember { mutableStateOf(true) }
+    var nonFavorite by remember { mutableStateOf(true) }
+    var unfinished by remember { mutableStateOf(true) }
+    var finished by remember { mutableStateOf(true) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
