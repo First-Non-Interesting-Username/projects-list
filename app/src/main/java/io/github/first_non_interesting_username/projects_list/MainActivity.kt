@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import io.github.first_non_interesting_username.projects_list.ui.screens.AboutScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.EditProjectScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.EditTaskScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.FilterScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.HomeScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.LicensesScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.NewProjectScreen
@@ -100,6 +101,9 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     viewModel = viewModel,
                 )
+            }
+            composable(Routes.FILTER) {
+                FilterScreen(navController)
             }
         }
     }

@@ -189,11 +189,11 @@ fun randomWeightedProject(projects: List<Project>): Project? {
     val unfinished = projects.filterNot { it.finished }
     var totalScore = 0
     for (project in unfinished) {
-        totalScore = totalScore + project.score
+        totalScore += project.score
     }
 
     if (totalScore == 0) {
-        if (unfinished.size == 0) {
+        if (unfinished.isEmpty()) {
             return projects.randomOrNull()
         }
         return unfinished.randomOrNull()

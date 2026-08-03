@@ -16,6 +16,7 @@ object Routes {
     const val TASK = "task"
     const val EDIT_TASK = "edit_task"
     const val SEARCH = "search"
+    const val FILTER = "filter"
     fun projectRoute(projectId: String) = "$PROJECT/$projectId"
     fun editProjectRoute(projectId: String) = "$EDIT_PROJECT/$projectId"
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.Routes
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,7 +60,8 @@ fun SearchScreen(navController: NavHostController,
         modifier = Modifier.fillMaxSize(),
         topBar = {
             SearchTopBar(
-                navController = navController
+                navController = navController,
+                onFilterClick = { navController.navigate(Routes.FILTER) }
             )
         },
     ) { innerPadding ->
