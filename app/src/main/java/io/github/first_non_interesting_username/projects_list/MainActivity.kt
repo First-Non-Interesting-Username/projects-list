@@ -86,15 +86,42 @@ class MainActivity : ComponentActivity() {
                     projectId = backStackEntry.arguments?.getString(Routes.PROJECT_ID_ARG),
                 )
             }
-            composable(Routes.NEW_TASK) {
-                NewTaskScreen(navController)
+            composable(
+                route = Routes.NEW_TASK_ROUTE,
+                arguments = listOf(navArgument(Routes.PROJECT_ID_ARG) { type = NavType.StringType })
+            ) { backStackEntry ->
+                NewTaskScreen(
+                    navController = navController,
+                    viewModel = viewModel,
+                    projectId = backStackEntry.arguments?.getString(Routes.PROJECT_ID_ARG),
+                )
             }
-            composable(Routes.TASK) {
-                TaskScreen(navController)
+            composable(
+                route = Routes.TASK_ROUTE,
+                arguments = listOf(
+                    navArgument(Routes.PROJECT_ID_ARG) { type = NavType.StringType },
+                    navArgument(Routes.TASK_ID_ARG) { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                TaskScreen(
+                    navController = navController,
+                    viewModel = viewModel,
+                    projectId = backStackEntry.arguments?.getString(Routes.PROJECT_ID_ARG),
+                    taskId = backStackEntry.arguments?.getString(Routes.TASK_ID_ARG),
+                )
             }
-            composable(Routes.EDIT_TASK) {
+            composable(
+                route = Routes.EDIT_TASK_ROUTE,
+                arguments = listOf(
+                    navArgument(Routes.PROJECT_ID_ARG) { type = NavType.StringType },
+                    navArgument(Routes.TASK_ID_ARG) { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
                 EditTaskScreen(
-                    navController
+                    navController = navController,
+                    viewModel = viewModel,
+                    projectId = backStackEntry.arguments?.getString(Routes.PROJECT_ID_ARG),
+                    taskId = backStackEntry.arguments?.getString(Routes.TASK_ID_ARG),
                 )
             }
             composable(Routes.SEARCH) {

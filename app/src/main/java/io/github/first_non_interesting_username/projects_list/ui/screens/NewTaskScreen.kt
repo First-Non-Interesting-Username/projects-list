@@ -23,12 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.data.model.Task
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectEditingColumn
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewTaskScreen(navController: NavHostController) {
+fun NewTaskScreen(
+    navController: NavHostController,
+    viewModel: ProjectViewModel,
+    projectId: String?,
+) {
     var priorityFloat by remember { mutableFloatStateOf(0f) }
     var motivationFloat by remember { mutableFloatStateOf(0f) }
     var name by remember { mutableStateOf("") }
@@ -40,7 +46,7 @@ fun NewTaskScreen(navController: NavHostController) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("Adding new project") },
+                title = { Text("Adding new task") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ),
@@ -54,16 +60,14 @@ fun NewTaskScreen(navController: NavHostController) {
                 },
                 actions = {
                     if (favorite) {
-                        IconButton(onClick = {favorite = !favorite}) {
+                        IconButton(onClick = { favorite = !favorite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_filled_star),
                                 contentDescription = "Mark $name as not favorite"
                             )
                         }
-                    }
-
-                    else {
-                        IconButton(onClick = {favorite = !favorite}) {
+                    } else {
+                        IconButton(onClick = { favorite = !favorite }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_star),
                                 contentDescription = "Mark $name as favorite"
@@ -75,26 +79,41 @@ fun NewTaskScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             ActionButton(
-                onClick = {},
+                onClick = {
+                    if (projectId != null && name.isNotBlank()) {
+                        val project = viewModel.projects.value.find { it.uuid == projectId }
+                        val nextChronology = (project?.tasks?.maxOfOrNull { it.chronology } ?: 0) + 1
+                        val task = Task(
+                            chronology = nextChronology,
+                            title = name,
+                            description = description,
+                            priority = priorityFloat,
+                            motivation = motivationFloat,
+                            favorite = favorite,
+                        )
+                        viewModel.addTask(projectId, task)
+                        navController.popBackStack()
+                    }
+                },
                 icon = painterResource(R.drawable.ic_add_task),
-                contentDescription = "Add the project",
+                contentDescription = "Add the task",
             )
         }
     ) { innerPadding ->
         Column(Modifier.verticalScroll(rememberScrollState())) {
-        ProjectEditingColumn(
-            modifier = Modifier.padding(innerPadding),
-            nameValue = name,
-            onNameValueChange = { name = it },
-            descriptionValue = description,
-            onDescriptionValueChange = { description = it },
-            linkValue = link,
-            onLinkValueChange = { link = it },
-            priorityValue = priorityFloat,
-            onPriorityChange = { priorityFloat = it },
-            motivationValue = motivationFloat,
-            onMotivationChange = { motivationFloat = it }
-        )
+            ProjectEditingColumn(
+                modifier = Modifier.padding(innerPadding),
+                nameValue = name,
+                onNameValueChange = { name = it },
+                descriptionValue = description,
+                onDescriptionValueChange = { description = it },
+                linkValue = link,
+                onLinkValueChange = { link = it },
+                priorityValue = priorityFloat,
+                onPriorityChange = { priorityFloat = it },
+                motivationValue = motivationFloat,
+                onMotivationChange = { motivationFloat = it }
+            )
         }
     }
 }

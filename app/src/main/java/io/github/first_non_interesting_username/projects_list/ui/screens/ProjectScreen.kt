@@ -135,6 +135,7 @@ fun ProjectScreen(
                 onSearchClick = {
                 },
                 onAddClick = {
+                    projectId?.let { navController.navigate(Routes.newTaskRoute(it)) }
                 },
                 onRandomClick = {
                 },
@@ -194,7 +195,9 @@ fun ProjectScreen(
                         motivation = task.motivation,
                         chronology = task.chronology,
                         onClick = {
-                            //navController.navigate(Routes.projectRoute(project.uuid))
+                            if (project != null) {
+                                navController.navigate(Routes.taskRoute(project.uuid, task.uuid))
+                            }
                         }
                     )
                 }

@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,24 +29,41 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.Routes
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.AlertDialogExample
 import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectDisplayColumn
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskScreen(navController: NavHostController) {
-    var priorityFloat by remember { mutableFloatStateOf(0f) }
-    var motivationFloat by remember { mutableFloatStateOf(0f) }
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var link by remember { mutableStateOf("") }
-    var finished by remember { mutableStateOf(false) }
+fun TaskScreen(
+    navController: NavHostController,
+    viewModel: ProjectViewModel,
+    projectId: String?,
+    taskId: String?,
+) {
+    val projects by viewModel.projects.collectAsState()
+    val project = projects.find { it.uuid == projectId }
+    val task = project?.tasks?.find { it.uuid == taskId }
+
+    var priorityFloat by remember(taskId) { mutableFloatStateOf(task?.priority ?: 0f) }
+    var motivationFloat by remember(taskId) { mutableFloatStateOf(task?.motivation ?: 0f) }
+    var name by remember(taskId) { mutableStateOf(task?.title ?: "") }
+    var description by remember(taskId) { mutableStateOf(task?.description ?: "") }
+    var finished by remember(taskId) { mutableStateOf(task?.finished ?: false) }
     var confirmationDialog by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var deletionDialog by remember { mutableStateOf(false) }
-    var favorite by remember { mutableStateOf(false) }
+    var favorite by remember(taskId) { mutableStateOf(task?.favorite ?: false) }
+
+    val toggleFavourite: () -> Unit = {
+        favorite = !favorite
+        if (projectId != null && task != null) {
+            viewModel.updateTask(projectId, task.copy(favorite = favorite))
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -65,16 +83,14 @@ fun TaskScreen(navController: NavHostController) {
                 },
                 actions = {
                     if (favorite) {
-                        IconButton(onClick = {favorite = !favorite}) {
+                        IconButton(onClick = { toggleFavourite() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_filled_star),
                                 contentDescription = "Mark $name as not favorite"
                             )
                         }
-                    }
-
-                    else {
-                        IconButton(onClick = {favorite = !favorite}) {
+                    } else {
+                        IconButton(onClick = { toggleFavourite() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_star),
                                 contentDescription = "Mark $name as favorite"
@@ -104,7 +120,11 @@ fun TaskScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             ActionButton(
-                onClick = {},
+                onClick = {
+                    if (projectId != null && taskId != null) {
+                        navController.navigate(Routes.editTaskRoute(projectId, taskId))
+                    }
+                },
                 icon = painterResource(R.drawable.ic_edit),
                 contentDescription = "Edit the task",
             )
@@ -115,7 +135,7 @@ fun TaskScreen(navController: NavHostController) {
                 modifier = Modifier.padding(innerPadding),
                 nameValue = name,
                 descriptionValue = description,
-                linkValue = link,
+                linkValue = "",
                 priorityValue = priorityFloat,
                 motivationValue = motivationFloat,
             )
@@ -135,6 +155,9 @@ fun TaskScreen(navController: NavHostController) {
                 onConfirmation = {
                     confirmationDialog = !confirmationDialog
                     finished = !finished
+                    if (projectId != null && task != null) {
+                        viewModel.updateTask(projectId, task.copy(finished = finished))
+                    }
                 },
                 dialogTitle = if (!finished) {
                     "Mark as finished"
@@ -154,6 +177,10 @@ fun TaskScreen(navController: NavHostController) {
                 onDismissRequest = { deletionDialog = !deletionDialog },
                 onConfirmation = {
                     deletionDialog = !deletionDialog
+                    if (projectId != null && taskId != null) {
+                        viewModel.deleteTask(projectId, taskId)
+                    }
+                    navController.popBackStack()
                 },
                 dialogTitle = "Delete $name",
                 dialogText = """
@@ -165,4 +192,3 @@ fun TaskScreen(navController: NavHostController) {
         }
     }
 }
-
