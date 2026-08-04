@@ -1,9 +1,7 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,14 +30,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.Routes
+import io.github.first_non_interesting_username.projects_list.data.model.Project
 import io.github.first_non_interesting_username.projects_list.data.model.Task
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.AlertDialogExample
 import io.github.first_non_interesting_username.projects_list.ui.components.AppBottomBar
 import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
+import io.github.first_non_interesting_username.projects_list.ui.components.MinimalDialog
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectDisplayColumn
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectRow
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
+import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +74,8 @@ fun ProjectScreen(
         .filterNot { it.finished }
         .sortedWith(compareBy<Task> { it.chronology }.thenBy { it.createdAt })
 
+    val randomTask = project?.let { randomWeightedTask(it) }
+    var noTasksDialog by remember { mutableStateOf(false) }
 
 
 
@@ -138,7 +141,15 @@ fun ProjectScreen(
                     projectId?.let { navController.navigate(Routes.newTaskRoute(it)) }
                 },
                 onRandomClick = {
-                },
+                    if (randomTask == null || project == null) {
+                        noTasksDialog = !noTasksDialog
+                    } else {
+                        navController.navigate(Routes.taskRoute(
+                            projectId = project.uuid,
+                            taskId = randomTask.uuid
+                        ))
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -244,5 +255,34 @@ fun ProjectScreen(
                 icon = painterResource(R.drawable.ic_delete_forever)
             )
         }
+        if (noTasksDialog) {
+            MinimalDialog(
+                onDismissRequest = { noTasksDialog = !noTasksDialog },
+                text = "No tasks were found",
+            )
+        }
     }
+}
+
+fun randomWeightedTask(project: Project): Task? {
+    val unfinished = project.tasks.filterNot { it.finished }
+    var totalScore = 0
+    for (project in unfinished) {
+        totalScore += project.score
+    }
+
+    if (totalScore == 0) {
+        if (unfinished.isEmpty()) {
+            return project.tasks.randomOrNull()
+        }
+        return unfinished.randomOrNull()
+    }
+
+    var roll = Random.nextDouble(totalScore.toDouble())
+    for (task in unfinished) {
+        roll -= task.score
+        if (roll < 0) return task
+    }
+
+    return unfinished.randomOrNull()
 }
