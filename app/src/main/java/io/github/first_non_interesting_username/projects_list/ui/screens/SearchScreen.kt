@@ -40,9 +40,10 @@ import io.github.first_non_interesting_username.projects_list.ui.viewmodel.Proje
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavHostController,
-                 viewModel: ProjectViewModel,
-                 ) {
+fun SearchScreen(
+    navController: NavHostController,
+    viewModel: ProjectViewModel,
+) {
 
     val projects by viewModel.projects.collectAsState()
 
@@ -77,9 +78,16 @@ fun SearchScreen(navController: NavHostController,
             OutlinedTextField(
                 value = query,
                 onValueChange = { query = it },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Search") },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_search),
+                        contentDescription = "search"
+                    )
+                }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             if (visibleProjects.isEmpty()) {
                 Column(
                     modifier = Modifier
@@ -113,6 +121,7 @@ fun SearchScreen(navController: NavHostController,
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
