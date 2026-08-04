@@ -2,6 +2,7 @@ package io.github.first_non_interesting_username.projects_list.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,6 +44,15 @@ fun FilterScreen(navController: NavHostController, viewModel: ProjectViewModel) 
         )
         navController.popBackStack()
         Unit
+    }
+
+    val resetFilters = {
+        motivation = 0f..10f
+        priority = 0f..10f
+        favorite = true
+        nonFavorite = true
+        unfinished = true
+        finished = true
     }
 
     BackHandler(onBack = applyAndGoBack)
@@ -88,6 +98,39 @@ fun FilterScreen(navController: NavHostController, viewModel: ProjectViewModel) 
                 onLeft = { unfinished = !unfinished },
                 onRight = { finished = !finished }
             )
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 1.dp)
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Button(
+                    onClick = {
+                        resetFilters()
+                    },
+                    modifier = Modifier
+                        .widthIn(min = 200.dp)
+                        .heightIn(min = 64.dp),
+                    shape = RoundedCornerShape(100.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+
+                    ),
+                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 20.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_reset_settings),
+                        contentDescription = "Reset filters",
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    Text(
+                        text = "Reset filters",
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+
+                }
+            }
         }
     }
 }

@@ -18,12 +18,10 @@ data class SearchSettings(
     val showNonFavorite: Boolean = true,
     val showUnfinished: Boolean = true,
     val showFinished: Boolean = true,
-    val sortBy: SortOption = SortOption.CHRONOLOGY,
+    val sortBy: SortOption = SortOption.MATCH_QUERY,
     val descending: Boolean = false,
 )
 
-// Where the query matches: title matches sort before description-only matches,
-// and earlier positions sort first. Lower value = better match.
 private fun Project.queryMatchRank(query: String): Int {
     val inTitle = title.indexOf(query, ignoreCase = true)
     if (inTitle >= 0) return inTitle
@@ -47,7 +45,7 @@ fun List<Project>.filterAndSort(query: String, settings: SearchSettings): List<P
         SortOption.PRIORITY -> filtered.sortedBy { it.priority }
         SortOption.MOTIVATION -> filtered.sortedBy { it.motivation }
         SortOption.SCORE -> filtered.sortedBy { it.score }
-        SortOption.MATCH_QUERY -> filtered.sortedBy { it.queryMatchRank(query) }
+        SortOption.MATCH_QUERY -> filtered.sortedWith(compareBy({ it.queryMatchRank(query) }, { it.chronology }))
     }
     return if (settings.descending) sorted.reversed() else sorted
 }
