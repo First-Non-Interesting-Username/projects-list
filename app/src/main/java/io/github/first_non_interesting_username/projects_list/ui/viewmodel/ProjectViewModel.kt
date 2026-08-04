@@ -11,12 +11,21 @@ import io.github.first_non_interesting_username.projects_list.data.model.Task
 import io.github.first_non_interesting_username.projects_list.data.model.withNewTask
 import io.github.first_non_interesting_username.projects_list.data.model.withUpdatedTask
 import io.github.first_non_interesting_username.projects_list.data.model.withoutTask
+import io.github.first_non_interesting_username.projects_list.data.model.SearchSettings
 import io.github.first_non_interesting_username.projects_list.data.repository.ProjectRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() {
 
     val projects: StateFlow<List<Project>> = repository.projects
+
+    private val _searchSettings = MutableStateFlow(SearchSettings())
+    val searchSettings: StateFlow<SearchSettings> = _searchSettings
+
+    fun updateSearchSettings(settings: SearchSettings) {
+        _searchSettings.value = settings
+    }
 
     fun addProject(
         title: String,

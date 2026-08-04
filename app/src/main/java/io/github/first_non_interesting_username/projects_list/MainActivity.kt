@@ -104,10 +104,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
             composable(Routes.FILTER) {
-                FilterScreen(navController)
+                FilterScreen(navController, viewModel)
             }
             composable(Routes.SORT) {
-                SortScreen(navController)
+                SortScreen(navController, viewModel)
             }
         }
     }

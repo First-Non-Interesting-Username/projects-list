@@ -23,7 +23,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.Routes
-import io.github.first_non_interesting_username.projects_list.data.model.Project
+import io.github.first_non_interesting_username.projects_list.data.model.filterAndSort
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectRow
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
@@ -46,15 +45,11 @@ fun SearchScreen(
 ) {
 
     val projects by viewModel.projects.collectAsState()
-
-    val visibleProjects = projects
-        .sortedWith(compareBy<Project> { it.chronology }.thenBy { it.createdAt })
+    val settings by viewModel.searchSettings.collectAsState()
 
     var query by remember { mutableStateOf("") }
-    var minPriority by remember { mutableFloatStateOf(0f) }
-    var maxPriority by remember { mutableFloatStateOf(10f) }
-    var minMotivation by remember { mutableFloatStateOf(0f) }
-    var maxMotivation by remember { mutableFloatStateOf(10f) }
+
+    val visibleProjects = projects.filterAndSort(query, settings)
 
 
     Scaffold(

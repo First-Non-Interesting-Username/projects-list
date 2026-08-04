@@ -1,5 +1,6 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,33 +24,39 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
+import io.github.first_non_interesting_username.projects_list.data.model.SortOption
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleTopBar
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 @Composable
-fun SortScreen(navController: NavHostController) {
-    val sortOptions = listOf(
-        "Chronology",
-        "Title",
-        "Priority",
-        "Motivation",
-        "Score",
-        "Match query"
-    )
-    var selectedSort by remember { mutableStateOf(sortOptions.first()) }
-    var descending by remember { mutableStateOf(false) }
+fun SortScreen(navController: NavHostController, viewModel: ProjectViewModel) {
+    val settings = viewModel.searchSettings.value
+
+    var selectedSort by remember { mutableStateOf(settings.sortBy) }
+    var descending by remember { mutableStateOf(settings.descending) }
+
+    val applyAndGoBack = {
+        viewModel.updateSearchSettings(
+            settings.copy(sortBy = selectedSort, descending = descending)
+        )
+        navController.popBackStack()
+        Unit
+    }
+
+    BackHandler(onBack = applyAndGoBack)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             ActionButton(
-                onClick = {},
+                onClick = applyAndGoBack,
                 icon = painterResource(R.drawable.ic_exit_to_app),
                 contentDescription = "Apply sort"
             )
         },
         topBar = {
-            SimpleTopBar(navController = navController, name = "Sort")
+            SimpleTopBar(navController = navController, name = "Sort", onBack = applyAndGoBack)
         }
     ) { innerPadding ->
         Column(
@@ -60,9 +67,9 @@ fun SortScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
         ) {
-            for (option in sortOptions) {
+            for (option in SortOption.entries) {
                 SortOptionRow(
-                    label = option,
+                    label = option.label,
                     selected = option == selectedSort,
                     onSelect = { selectedSort = option }
                 )

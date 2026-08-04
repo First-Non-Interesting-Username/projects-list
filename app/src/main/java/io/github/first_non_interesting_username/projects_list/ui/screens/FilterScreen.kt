@@ -1,5 +1,6 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,29 +13,51 @@ import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleTopBar
+import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterScreen(navController: NavHostController) {
-    var motivation by remember { mutableStateOf(0f..10f) }
-    var priority by remember { mutableStateOf(0f..10f) }
-    var favorite by remember { mutableStateOf(true) }
-    var nonFavorite by remember { mutableStateOf(true) }
-    var unfinished by remember { mutableStateOf(true) }
-    var finished by remember { mutableStateOf(true) }
+fun FilterScreen(navController: NavHostController, viewModel: ProjectViewModel) {
+    val settings = viewModel.searchSettings.value
+
+    var motivation by remember { mutableStateOf(settings.minMotivation..settings.maxMotivation) }
+    var priority by remember { mutableStateOf(settings.minPriority..settings.maxPriority) }
+    var favorite by remember { mutableStateOf(settings.showFavorite) }
+    var nonFavorite by remember { mutableStateOf(settings.showNonFavorite) }
+    var unfinished by remember { mutableStateOf(settings.showUnfinished) }
+    var finished by remember { mutableStateOf(settings.showFinished) }
+
+    val applyAndGoBack = {
+        viewModel.updateSearchSettings(
+            settings.copy(
+                minMotivation = motivation.start,
+                maxMotivation = motivation.endInclusive,
+                minPriority = priority.start,
+                maxPriority = priority.endInclusive,
+                showFavorite = favorite,
+                showNonFavorite = nonFavorite,
+                showUnfinished = unfinished,
+                showFinished = finished
+            )
+        )
+        navController.popBackStack()
+        Unit
+    }
+
+    BackHandler(onBack = applyAndGoBack)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             ActionButton(
-                onClick = {},
+                onClick = applyAndGoBack,
                 icon = painterResource(R.drawable.ic_exit_to_app),
                 contentDescription = "Apply filters"
             )
         },
         topBar = {
-            SimpleTopBar(navController = navController, name = "Settings")
+            SimpleTopBar(navController = navController, name = "Settings", onBack = applyAndGoBack)
         }
     ) { innerPadding ->
         Column(

@@ -16,7 +16,8 @@ import io.github.first_non_interesting_username.projects_list.R
 @Composable
 fun SimpleTopBar(
     navController: NavHostController,
-    name: String
+    name: String,
+    onBack: () -> Unit = { navController.popBackStack() }
     ) {
     TopAppBar(
         title = { Text(name) },
@@ -24,7 +25,7 @@ fun SimpleTopBar(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
         navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = onBack) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = "Back",
