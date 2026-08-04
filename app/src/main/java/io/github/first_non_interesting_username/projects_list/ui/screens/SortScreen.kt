@@ -33,7 +33,8 @@ fun SortScreen(navController: NavHostController) {
         "Title",
         "Priority",
         "Motivation",
-        "Score"
+        "Score",
+        "Match query"
     )
     var selectedSort by remember { mutableStateOf(sortOptions.first()) }
     var descending by remember { mutableStateOf(false) }
