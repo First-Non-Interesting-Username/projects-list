@@ -23,6 +23,7 @@ import io.github.first_non_interesting_username.projects_list.ui.screens.Project
 import io.github.first_non_interesting_username.projects_list.ui.screens.PrototypeScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SearchScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SettingsScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.SortScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.TaskScreen
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
@@ -104,6 +105,9 @@ class MainActivity : ComponentActivity() {
             }
             composable(Routes.FILTER) {
                 FilterScreen(navController)
+            }
+            composable(Routes.SORT) {
+                SortScreen(navController)
             }
         }
     }

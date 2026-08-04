@@ -61,6 +61,7 @@ fun SearchScreen(navController: NavHostController,
         topBar = {
             SearchTopBar(
                 navController = navController,
+                onSortClick = { navController.navigate(Routes.SORT) },
                 onFilterClick = { navController.navigate(Routes.FILTER) }
             )
         },
