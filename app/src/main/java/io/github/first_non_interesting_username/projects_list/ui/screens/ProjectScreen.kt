@@ -1,15 +1,12 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -153,102 +150,96 @@ fun ProjectScreen(
             )
         }
     ) { innerPadding ->
-        Column(Modifier.verticalScroll(rememberScrollState())) {
-            ProjectDisplayColumn(
-                modifier = Modifier.padding(innerPadding),
-                nameValue = name,
-                descriptionValue = description,
-                linkValue = link,
-                priorityValue = priorityFloat,
-                motivationValue = motivationFloat,
-            )
-            Spacer(Modifier.height(8.dp))
-            ConfirmationButton(
-                icon = painterResource(R.drawable.ic_done_all),
-                text = "Mark as finished",
-                clickedText = "Mark as unfinished",
-                contentDescription = "Toggle state of completion of the project",
-                onClick = { confirmationDialog = !confirmationDialog },
-                clicked = finished
-            )
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 1.dp)
-            Spacer(Modifier.height(8.dp))
-
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                ProjectDisplayColumn(
+                    modifier = Modifier,
+                    nameValue = name,
+                    descriptionValue = description,
+                    linkValue = link,
+                    priorityValue = priorityFloat,
+                    motivationValue = motivationFloat,
+                )
+            }
+            item {
+                ConfirmationButton(
+                    icon = painterResource(R.drawable.ic_done_all),
+                    text = "Mark as finished",
+                    clickedText = "Mark as unfinished",
+                    contentDescription = "Toggle state of completion of the project",
+                    onClick = { confirmationDialog = !confirmationDialog },
+                    clicked = finished
+                )
+            }
+            item {
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 1.dp)
+            }
             if (visibleTasks.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
+                item {
                     Text("No tasks yet! Tap the + icon below to add one.")
                 }
             } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    items(visibleTasks) { task ->
-                        ProjectRow(
-                            name = task.title,
-                            isFavorite = task.favorite,
-                            priority = task.priority,
-                            motivation = task.motivation,
-                            chronology = task.chronology,
-                            onClick = {
-                                //navController.navigate(Routes.projectRoute(project.uuid))
-                            }
-                        )
-                    }
+                items(visibleTasks) { task ->
+                    ProjectRow(
+                        name = task.title,
+                        isFavorite = task.favorite,
+                        priority = task.priority,
+                        motivation = task.motivation,
+                        chronology = task.chronology,
+                        onClick = {
+                            //navController.navigate(Routes.projectRoute(project.uuid))
+                        }
+                    )
                 }
             }
-            if (confirmationDialog) {
-                AlertDialogExample(
-                    onDismissRequest = { confirmationDialog = !confirmationDialog },
-                    onConfirmation = {
-                        confirmationDialog = !confirmationDialog
-                        finished = !finished
-                        project?.let { viewModel.updateProject(it.copy(finished = finished)) }
-                    },
-                    dialogTitle = if (!finished) {
-                        "Mark as finished"
-                    } else {
-                        "Mark as unfinished"
-                    },
-                    dialogText = if (!finished) {
-                        "Do you want to mark project $name as finished?"
-                    } else {
-                        "Do you want to mark project $name as unfinished?"
-                    },
-                    icon = painterResource(R.drawable.ic_done_all)
-                )
-            }
-            if (deletionDialog) {
-                AlertDialogExample(
-                    onDismissRequest = { deletionDialog = !deletionDialog },
-                    onConfirmation = {
-                        deletionDialog = !deletionDialog
-                        projectId?.let { viewModel.deleteProject(it) }
-                        navController.navigate(Routes.HOME) {
-                            popUpTo(Routes.HOME) {
-                                inclusive = false
-                            }
+        }
+        if (confirmationDialog) {
+            AlertDialogExample(
+                onDismissRequest = { confirmationDialog = !confirmationDialog },
+                onConfirmation = {
+                    confirmationDialog = !confirmationDialog
+                    finished = !finished
+                    project?.let { viewModel.updateProject(it.copy(finished = finished)) }
+                },
+                dialogTitle = if (!finished) {
+                    "Mark as finished"
+                } else {
+                    "Mark as unfinished"
+                },
+                dialogText = if (!finished) {
+                    "Do you want to mark project $name as finished?"
+                } else {
+                    "Do you want to mark project $name as unfinished?"
+                },
+                icon = painterResource(R.drawable.ic_done_all)
+            )
+        }
+        if (deletionDialog) {
+            AlertDialogExample(
+                onDismissRequest = { deletionDialog = !deletionDialog },
+                onConfirmation = {
+                    deletionDialog = !deletionDialog
+                    projectId?.let { viewModel.deleteProject(it) }
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.HOME) {
+                            inclusive = false
                         }
-                    },
-                    dialogTitle = "Delete $name",
-                    dialogText = """
+                    }
+                },
+                dialogTitle = "Delete $name",
+                dialogText = """
                     Do you want to delete project $name with all tasks assigned to it?
                     This action is irreversible.
                 """.trimIndent(),
-                    icon = painterResource(R.drawable.ic_delete_forever)
-                )
-            }
+                icon = painterResource(R.drawable.ic_delete_forever)
+            )
         }
     }
 }

@@ -27,7 +27,7 @@ fun ProjectDisplayColumn(
     Column(
         modifier = modifier.then(
             Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(4.dp),
         ) ) {
         MyTextField(
