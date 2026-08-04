@@ -24,7 +24,10 @@ import io.github.first_non_interesting_username.projects_list.ui.screens.Prototy
 import io.github.first_non_interesting_username.projects_list.ui.screens.SearchScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SettingsScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.SortScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.TaskFilterScreen
 import io.github.first_non_interesting_username.projects_list.ui.screens.TaskScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.TaskSearchScreen
+import io.github.first_non_interesting_username.projects_list.ui.screens.TaskSortScreen
 import io.github.first_non_interesting_username.projects_list.ui.theme.ProjectsTheme
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
@@ -135,6 +138,22 @@ class MainActivity : ComponentActivity() {
             }
             composable(Routes.SORT) {
                 SortScreen(navController, viewModel)
+            }
+            composable(
+                route = Routes.TASK_SEARCH_ROUTE,
+                arguments = listOf(navArgument(Routes.PROJECT_ID_ARG) { type = NavType.StringType })
+            ) { backStackEntry ->
+                TaskSearchScreen(
+                    navController = navController,
+                    viewModel = viewModel,
+                    projectId = backStackEntry.arguments?.getString(Routes.PROJECT_ID_ARG),
+                )
+            }
+            composable(Routes.TASK_FILTER) {
+                TaskFilterScreen(navController, viewModel)
+            }
+            composable(Routes.TASK_SORT) {
+                TaskSortScreen(navController, viewModel)
             }
         }
     }

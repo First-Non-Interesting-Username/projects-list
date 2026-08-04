@@ -27,6 +27,13 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
         _searchSettings.value = settings
     }
 
+    private val _taskSearchSettings = MutableStateFlow(SearchSettings())
+    val taskSearchSettings: StateFlow<SearchSettings> = _taskSearchSettings
+
+    fun updateTaskSearchSettings(settings: SearchSettings) {
+        _taskSearchSettings.value = settings
+    }
+
     fun addProject(
         title: String,
         description: String = "",

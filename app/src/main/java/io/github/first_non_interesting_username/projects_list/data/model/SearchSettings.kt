@@ -49,3 +49,32 @@ fun List<Project>.filterAndSort(query: String, settings: SearchSettings): List<P
     }
     return if (settings.descending) sorted.reversed() else sorted
 }
+
+private fun Task.queryMatchRank(query: String): Int {
+    val inTitle = title.indexOf(query, ignoreCase = true)
+    if (inTitle >= 0) return inTitle
+    val inDescription = description.indexOf(query, ignoreCase = true)
+    if (inDescription >= 0) return title.length + inDescription
+    return Int.MAX_VALUE
+}
+
+@JvmName("filterAndSortTasks")
+fun List<Task>.filterAndSort(query: String, settings: SearchSettings): List<Task> {
+    val filtered = filter { task ->
+        (task.title.contains(query, ignoreCase = true) ||
+                task.description.contains(query, ignoreCase = true)) &&
+                task.priority in settings.minPriority..settings.maxPriority &&
+                task.motivation in settings.minMotivation..settings.maxMotivation &&
+                (if (task.favorite) settings.showFavorite else settings.showNonFavorite) &&
+                (if (task.finished) settings.showFinished else settings.showUnfinished)
+    }
+    val sorted = when (settings.sortBy) {
+        SortOption.CHRONOLOGY -> filtered.sortedWith(compareBy({ it.chronology }, { it.createdAt }))
+        SortOption.TITLE -> filtered.sortedBy { it.title.lowercase() }
+        SortOption.PRIORITY -> filtered.sortedBy { it.priority }
+        SortOption.MOTIVATION -> filtered.sortedBy { it.motivation }
+        SortOption.SCORE -> filtered.sortedBy { it.score }
+        SortOption.MATCH_QUERY -> filtered.sortedWith(compareBy({ it.queryMatchRank(query) }, { it.chronology }))
+    }
+    return if (settings.descending) sorted.reversed() else sorted
+}

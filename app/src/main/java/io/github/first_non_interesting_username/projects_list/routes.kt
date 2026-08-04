@@ -22,10 +22,15 @@ object Routes {
     const val SEARCH = "search"
     const val FILTER = "filter"
     const val SORT = "sort"
+    const val TASK_SEARCH = "task_search"
+    const val TASK_SEARCH_ROUTE = "$TASK_SEARCH/{$PROJECT_ID_ARG}"
+    const val TASK_FILTER = "task_filter"
+    const val TASK_SORT = "task_sort"
 
     fun projectRoute(projectId: String) = "$PROJECT/$projectId"
     fun editProjectRoute(projectId: String) = "$EDIT_PROJECT/$projectId"
     fun newTaskRoute(projectId: String) = "$NEW_TASK/$projectId"
     fun taskRoute(projectId: String, taskId: String) = "$TASK/$projectId/$taskId"
     fun editTaskRoute(projectId: String, taskId: String) = "$EDIT_TASK/$projectId/$taskId"
+    fun taskSearchRoute(projectId: String) = "$TASK_SEARCH/$projectId"
 }

@@ -136,6 +136,7 @@ fun ProjectScreen(
             AppBottomBar(
                 content = "tasks",
                 onSearchClick = {
+                    projectId?.let { navController.navigate(Routes.taskSearchRoute(it)) }
                 },
                 onAddClick = {
                     projectId?.let { navController.navigate(Routes.newTaskRoute(it)) }
