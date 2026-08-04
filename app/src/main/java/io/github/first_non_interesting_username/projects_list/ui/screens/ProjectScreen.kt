@@ -1,15 +1,19 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,16 +28,20 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.Routes
+import io.github.first_non_interesting_username.projects_list.data.model.Task
 import io.github.first_non_interesting_username.projects_list.ui.components.ActionButton
 import io.github.first_non_interesting_username.projects_list.ui.components.AlertDialogExample
+import io.github.first_non_interesting_username.projects_list.ui.components.AppBottomBar
 import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
 import io.github.first_non_interesting_username.projects_list.ui.components.ProjectDisplayColumn
+import io.github.first_non_interesting_username.projects_list.ui.components.ProjectRow
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +69,14 @@ fun ProjectScreen(
         favorite = !favorite
         project?.let { viewModel.updateProject(it.copy(favorite = favorite)) }
     }
+
+    val tasks = project?.tasks ?: emptyList()
+
+    val visibleTasks = tasks
+        .filterNot { it.finished }
+        .sortedWith(compareBy<Task> { it.chronology }.thenBy { it.createdAt })
+
+
 
 
     Scaffold(
@@ -116,6 +132,17 @@ fun ProjectScreen(
                 }
             )
         },
+        bottomBar = {
+            AppBottomBar(
+                content = "tasks",
+                onSearchClick = {
+                },
+                onAddClick = {
+                },
+                onRandomClick = {
+                },
+            )
+        },
         floatingActionButton = {
             ActionButton(
                 onClick = {
@@ -144,48 +171,84 @@ fun ProjectScreen(
                 onClick = { confirmationDialog = !confirmationDialog },
                 clicked = finished
             )
-        }
-        if (confirmationDialog) {
-            AlertDialogExample(
-                onDismissRequest = { confirmationDialog = !confirmationDialog },
-                onConfirmation = {
-                    confirmationDialog = !confirmationDialog
-                    finished = !finished
-                    project?.let { viewModel.updateProject(it.copy(finished = finished)) }
-                },
-                dialogTitle = if (!finished) {
-                    "Mark as finished"
-                } else {
-                    "Mark as unfinished"
-                },
-                dialogText = if (!finished) {
-                    "Do you want to mark project $name as finished?"
-                } else {
-                    "Do you want to mark project $name as unfinished?"
-                },
-                icon = painterResource(R.drawable.ic_done_all)
-            )
-        }
-        if (deletionDialog) {
-            AlertDialogExample(
-                onDismissRequest = { deletionDialog = !deletionDialog },
-                onConfirmation = {
-                    deletionDialog = !deletionDialog
-                    projectId?.let { viewModel.deleteProject(it) }
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.HOME) {
-                            inclusive = false
-                        }
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 1.dp)
+            Spacer(Modifier.height(8.dp))
+
+            if (visibleTasks.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("No tasks yet! Tap the + icon below to add one.")
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    items(visibleTasks) { task ->
+                        ProjectRow(
+                            name = task.title,
+                            isFavorite = task.favorite,
+                            priority = task.priority,
+                            motivation = task.motivation,
+                            chronology = task.chronology,
+                            onClick = {
+                                //navController.navigate(Routes.projectRoute(project.uuid))
+                            }
+                        )
                     }
-                },
-                dialogTitle = "Delete $name",
-                dialogText = """
+                }
+            }
+            if (confirmationDialog) {
+                AlertDialogExample(
+                    onDismissRequest = { confirmationDialog = !confirmationDialog },
+                    onConfirmation = {
+                        confirmationDialog = !confirmationDialog
+                        finished = !finished
+                        project?.let { viewModel.updateProject(it.copy(finished = finished)) }
+                    },
+                    dialogTitle = if (!finished) {
+                        "Mark as finished"
+                    } else {
+                        "Mark as unfinished"
+                    },
+                    dialogText = if (!finished) {
+                        "Do you want to mark project $name as finished?"
+                    } else {
+                        "Do you want to mark project $name as unfinished?"
+                    },
+                    icon = painterResource(R.drawable.ic_done_all)
+                )
+            }
+            if (deletionDialog) {
+                AlertDialogExample(
+                    onDismissRequest = { deletionDialog = !deletionDialog },
+                    onConfirmation = {
+                        deletionDialog = !deletionDialog
+                        projectId?.let { viewModel.deleteProject(it) }
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(Routes.HOME) {
+                                inclusive = false
+                            }
+                        }
+                    },
+                    dialogTitle = "Delete $name",
+                    dialogText = """
                     Do you want to delete project $name with all tasks assigned to it?
                     This action is irreversible.
                 """.trimIndent(),
-                icon = painterResource(R.drawable.ic_delete_forever)
-            )
+                    icon = painterResource(R.drawable.ic_delete_forever)
+                )
+            }
         }
     }
 }
-

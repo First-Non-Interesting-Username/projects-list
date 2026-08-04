@@ -13,6 +13,7 @@ data class Task(
     val motivation: Float,
     val finished: Boolean = false,
     val favorite: Boolean = false,
+    val createdAt: Long = System.currentTimeMillis(),
 ) {
     val score: Int
         get() = motivation.toInt() * priority.toInt()
