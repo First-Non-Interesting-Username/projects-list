@@ -30,7 +30,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.data.model.Project
-import io.github.first_non_interesting_username.projects_list.data.model.Task
+import io.github.first_non_interesting_username.projects_list.ui.components.ConfirmationButton
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleProjectRow
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleTopBar
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
@@ -137,19 +137,15 @@ fun DeletionDialog(
         .filter { if (finishedOnly) it.finished else true }
         .sortedWith(compareBy<Project> { it.chronology }.thenBy { it.createdAt })
 
-    var tasks by remember { mutableStateOf(emptyList<Task>()) }
-
-    val filtered = buildList {
-        for (project in projects) {
+    val tasks = buildList {
+        for (project in projectsList) {
             for (task in project.tasks) {
                 if (task.finished || !finishedOnly) {
-                    add(task)
+                    add(task to project)
                 }
             }
         }
     }
-    tasks = filtered
-
     Dialog(onDismissRequest = onDismissRequest) {
         Card(shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.padding(24.dp)) {
@@ -168,14 +164,29 @@ fun DeletionDialog(
                             chronology = project.chronology,
                         )
                     }
-                    items(tasks) { task ->
+                    items(tasks) { (task, project) ->
                         SimpleProjectRow(
                             name = task.title,
-                            chronology = task.chronology,
+                            chronology = project.chronology,
                         )
                     }
                 }
-
+                Spacer(Modifier.height(8.dp))
+                ConfirmationButton(
+                    onClick = {
+                        onDismissRequest()
+                        for (project in projects) {
+                            viewModel.deleteProject(project.uuid)
+                        }
+                        tasks.forEach { (task, project) ->
+                            viewModel.deleteTask(
+                                projectUuid = project.uuid,
+                                taskUuid = task.uuid
+                            )
+                        }
+                    },
+                    text = "Confirm deletion"
+                )
             }
         }
     }
