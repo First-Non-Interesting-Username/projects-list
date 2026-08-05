@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 HomeScreen(navController, viewModel)
             }
             composable(Routes.SETTINGS) {
-                SettingsScreen(navController)
+                SettingsScreen(navController, viewModel)
             }
             composable(Routes.ABOUT) {
                 AboutScreen(navController)
