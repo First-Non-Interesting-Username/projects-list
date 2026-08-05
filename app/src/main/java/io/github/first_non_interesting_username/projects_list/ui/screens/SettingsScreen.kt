@@ -1,5 +1,6 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
+import android.text.format.Formatter
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -40,8 +42,11 @@ import io.github.first_non_interesting_username.projects_list.ui.viewmodel.Proje
 fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel) {
     val projects by viewModel.projects.collectAsState()
 
-    var deleteAllDialog by remember { mutableStateOf(true) }
+    var deleteAllDialog by remember { mutableStateOf(false) }
     var deleteFinishedDialog by remember { mutableStateOf(false) }
+
+    val storageSize by viewModel.storageSize.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -101,7 +106,7 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
             Spacer(Modifier.height(8.dp))
             ActionRow(
                 icon = painterResource(R.drawable.ic_storage),
-                title = "Used storage: 500GB",
+                title = "Used storage: ${Formatter.formatShortFileSize(context, storageSize)}",
                 subtitle = "Something went very wrong if it's above 10MB",
                 enabled = true,
                 onClick = { }
@@ -153,7 +158,7 @@ fun DeletionDialog(
                 Spacer(Modifier.height(24.dp))
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .weight(1f, fill = false)
                         .padding(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally

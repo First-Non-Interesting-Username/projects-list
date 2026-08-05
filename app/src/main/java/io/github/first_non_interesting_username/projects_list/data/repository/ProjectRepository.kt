@@ -17,11 +17,15 @@ class ProjectRepository(context: Context) {
     private val _projects = MutableStateFlow<List<Project>>(emptyList())
     val projects: StateFlow<List<Project>> = _projects.asStateFlow()
 
+    private val _storageSize = MutableStateFlow(0L)
+    val storageSize: StateFlow<Long> = _storageSize.asStateFlow()
+
     init {
         load()
     }
 
     private fun load() {
+        _storageSize.value = file.length()
         _projects.value = if (file.exists()) {
             runCatching { json.decodeFromString<List<Project>>(file.readText()) }
                 .getOrDefault(emptyList())

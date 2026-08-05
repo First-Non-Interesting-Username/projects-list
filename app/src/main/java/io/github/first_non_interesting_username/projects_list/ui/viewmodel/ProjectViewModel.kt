@@ -34,6 +34,8 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
         _taskSearchSettings.value = settings
     }
 
+    val storageSize: StateFlow<Long> = repository.storageSize
+
     fun addProject(
         title: String,
         description: String = "",
