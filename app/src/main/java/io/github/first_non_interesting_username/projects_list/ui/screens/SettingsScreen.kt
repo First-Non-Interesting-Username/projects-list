@@ -26,12 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastCbrt
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import io.github.first_non_interesting_username.projects_list.R
 import io.github.first_non_interesting_username.projects_list.data.model.Project
-import io.github.first_non_interesting_username.projects_list.ui.components.ProjectRow
+import io.github.first_non_interesting_username.projects_list.data.model.Task
+import io.github.first_non_interesting_username.projects_list.ui.components.SimpleProjectRow
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleTopBar
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
 
@@ -88,7 +88,7 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
                 title = "Prune finished",
                 subtitle = "Delete all finished projects and tasks",
                 enabled = true,
-                onClick = {deleteFinishedDialog = !deleteFinishedDialog}
+                onClick = { deleteFinishedDialog = !deleteFinishedDialog }
             )
             Spacer(Modifier.height(8.dp))
             ActionRow(
@@ -96,7 +96,7 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
                 title = "Delete all data",
                 subtitle = "Delete all projects and tasks",
                 enabled = true,
-                onClick = {deleteAllDialog = !deleteAllDialog}
+                onClick = { deleteAllDialog = !deleteAllDialog }
             )
             Spacer(Modifier.height(8.dp))
             ActionRow(
@@ -111,7 +111,7 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
                     viewModel = viewModel,
                     finishedOnly = false,
                     projectsList = projects,
-                    onDismissRequest = {deleteAllDialog = !deleteAllDialog}
+                    onDismissRequest = { deleteAllDialog = !deleteAllDialog }
                 )
             }
             if (deleteFinishedDialog) {
@@ -119,7 +119,7 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
                     viewModel = viewModel,
                     finishedOnly = true,
                     projectsList = projects,
-                    onDismissRequest = {deleteFinishedDialog = !deleteFinishedDialog}
+                    onDismissRequest = { deleteFinishedDialog = !deleteFinishedDialog }
                 )
             }
         }
@@ -137,10 +137,24 @@ fun DeletionDialog(
         .filter { if (finishedOnly) it.finished else true }
         .sortedWith(compareBy<Project> { it.chronology }.thenBy { it.createdAt })
 
+    var tasks by remember { mutableStateOf(emptyList<Task>()) }
+
+    val filtered = buildList {
+        for (project in projects) {
+            for (task in project.tasks) {
+                if (task.finished || !finishedOnly) {
+                    add(task)
+                }
+            }
+        }
+    }
+    tasks = filtered
+
     Dialog(onDismissRequest = onDismissRequest) {
         Card(shape = RoundedCornerShape(16.dp)) {
             Column(Modifier.padding(24.dp)) {
                 Text("Items to be deleted", style = MaterialTheme.typography.titleLarge)
+                Spacer(Modifier.height(24.dp))
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -149,13 +163,15 @@ fun DeletionDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(projects) { project ->
-                        ProjectRow(
+                        SimpleProjectRow(
                             name = project.title,
-                            isFavorite = project.favorite,
-                            priority = project.priority,
-                            motivation = project.motivation,
                             chronology = project.chronology,
-                            onClick = {}
+                        )
+                    }
+                    items(tasks) { task ->
+                        SimpleProjectRow(
+                            name = task.title,
+                            chronology = task.chronology,
                         )
                     }
                 }
