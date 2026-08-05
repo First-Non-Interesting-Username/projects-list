@@ -7,11 +7,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import io.github.first_non_interesting_username.projects_list.ProjectsApplication
 import io.github.first_non_interesting_username.projects_list.data.model.Project
+import io.github.first_non_interesting_username.projects_list.data.model.SearchSettings
 import io.github.first_non_interesting_username.projects_list.data.model.Task
 import io.github.first_non_interesting_username.projects_list.data.model.withNewTask
 import io.github.first_non_interesting_username.projects_list.data.model.withUpdatedTask
 import io.github.first_non_interesting_username.projects_list.data.model.withoutTask
-import io.github.first_non_interesting_username.projects_list.data.model.SearchSettings
 import io.github.first_non_interesting_username.projects_list.data.repository.ProjectRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -74,7 +74,10 @@ class ProjectViewModel(private val repository: ProjectRepository) : ViewModel() 
 
     fun exportData(): String = repository.exportJson()
 
-    fun importData(jsonString: String) = repository.importJson(jsonString)
+    fun importData(jsonString: String, replace: Boolean) = repository.importJson(
+        jsonString = jsonString,
+        replace = replace
+    )
 
     private fun findProject(id: String) = projects.value.find { it.uuid == id }
 
