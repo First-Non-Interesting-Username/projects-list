@@ -1,6 +1,8 @@
 package io.github.first_non_interesting_username.projects_list.ui.screens
 
 import android.text.format.Formatter
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +38,9 @@ import io.github.first_non_interesting_username.projects_list.ui.components.Conf
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleProjectRow
 import io.github.first_non_interesting_username.projects_list.ui.components.SimpleTopBar
 import io.github.first_non_interesting_username.projects_list.ui.viewmodel.ProjectViewModel
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +52,31 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
 
     val storageSize by viewModel.storageSize.collectAsState()
     val context = LocalContext.current
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json")
+    ) { uri ->
+        uri?.let {
+            context.contentResolver.openOutputStream(it)?.use { outputStream ->
+                OutputStreamWriter(outputStream).use { writer ->
+                    writer.write(viewModel.exportData())
+                }
+            }
+        }
+    }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let {
+            context.contentResolver.openInputStream(it)?.use { inputStream ->
+                BufferedReader(InputStreamReader(inputStream)).use { reader ->
+                    val jsonString = reader.readText()
+                    viewModel.importData(jsonString, replace = false)
+                }
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -67,10 +97,11 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
             // SectionHeader(text = "Data")
             ActionRow(
                 icon = painterResource(R.drawable.ic_upload),
-                title = "Export data ",
+                title = "Export data",
                 subtitle = "Export all projects and tasks",
                 enabled = true,
                 onClick = {
+                    exportLauncher.launch("projects_backup.json")
                 }
             )
             Spacer(Modifier.height(8.dp))
@@ -80,11 +111,7 @@ fun SettingsScreen(navController: NavHostController, viewModel: ProjectViewModel
                 subtitle = "Import data from a backup",
                 enabled = true,
                 onClick = {
-                    var jsonString = ""
-                    viewModel.importData(
-                        jsonString,
-                        replace = false
-                    )
+                    importLauncher.launch(arrayOf("application/json"))
                 }
             )
             Spacer(Modifier.height(8.dp))
