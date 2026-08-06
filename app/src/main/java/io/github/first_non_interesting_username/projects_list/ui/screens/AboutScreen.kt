@@ -156,8 +156,7 @@ fun MainSection(
     ) {
         // SectionHeader(text = "main")
         ActionRow(
-            // Placeholder icon
-            icon = painterResource(R.drawable.ic_public),
+            icon = painterResource(R.drawable.ic_assignment),
             title = "Projects List",
             subtitle = "A simple app for side project management",
             enabled = true,
