@@ -24,8 +24,8 @@ jobs:
             exit 1
           fi
 
-          VERSION_NAME="${TAG#v}"                    # v1.2.3 -> 1.2.3
-          NUMERIC="${VERSION_NAME%%-*}"               # 1.2.3-beta.1 -> 1.2.3
+          VERSION_NAME="${TAG#v}"
+          NUMERIC="${VERSION_NAME%%-*}"
           IFS='.' read -r MAJOR MINOR PATCH <<< "$NUMERIC"
 
           VERSION_CODE=$(( 10#$MAJOR * 10000 + 10#$MINOR * 100 + 10#$PATCH ))
@@ -51,11 +51,17 @@ jobs:
 
       - name: Commit and push version bump
         run: |
-          git config user.name  "github-actions[bot]"
+          git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add app/build.gradle.kts
-          git commit -m "chore(release): bump version to $VERSION_NAME"
-          git push origin "HEAD:$(git branch --show-current)"
+
+          if git diff --cached --quiet; then
+            echo "No version changes to commit"
+          else
+            git commit -m "chore(release): bump version to $VERSION_NAME"
+            git push origin "HEAD:$(git branch --show-current)"
+          fi
 
       - name: Build release APK
         run: |
