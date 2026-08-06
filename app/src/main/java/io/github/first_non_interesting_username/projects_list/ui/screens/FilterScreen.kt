@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterScreen(navController: NavHostController, viewModel: ProjectViewModel) {
-    val settings = viewModel.searchSettings.value
+    val settings by viewModel.searchSettings.collectAsState()
 
     var motivation by remember { mutableStateOf(settings.minMotivation..settings.maxMotivation) }
     var priority by remember { mutableStateOf(settings.minPriority..settings.maxPriority) }

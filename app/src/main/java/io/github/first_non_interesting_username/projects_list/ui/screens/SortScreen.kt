@@ -15,6 +15,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,7 +32,7 @@ import io.github.first_non_interesting_username.projects_list.ui.viewmodel.Proje
 
 @Composable
 fun SortScreen(navController: NavHostController, viewModel: ProjectViewModel) {
-    val settings = viewModel.searchSettings.value
+    val settings by viewModel.searchSettings.collectAsState()
 
     var selectedSort by remember { mutableStateOf(settings.sortBy) }
     var descending by remember { mutableStateOf(settings.descending) }
