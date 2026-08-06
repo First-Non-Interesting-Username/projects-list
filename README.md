@@ -25,7 +25,7 @@ Everything you might expect from basic todo app plus:
 
 ## Installation
 
-Get the APK from releases and install it in your preffered way.
+Get the APK from release tab and install it in your preffered way.
 
 ## Credits
 
