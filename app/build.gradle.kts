@@ -19,8 +19,8 @@ android {
         applicationId = "io.github.first_non_interesting_username.projects_list"
         minSdk = 24
         targetSdk = 36
-        versionCode = 10000
-        versionName = "1.0.0"
+        versionCode = 10001
+        versionName = "1.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "ProjectsList-v${versionName}"
