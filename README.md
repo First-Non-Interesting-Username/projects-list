@@ -27,6 +27,20 @@ Everything you might expect from basic todo app plus:
 
 Get the APK from release tab and install it in your preffered way.
 
+## Building
+
+```bash
+git clone https://github.com/First-Non-Interesting-Username/projects-list.git
+cd projects-list
+
+# Make sure ANDROID_HOME points to your SDK
+# On Linux typically ~/Android/Sdk
+
+chmod +x gradlew
+./gradlew assembleRelease
+# APK outputs to: app/build/outputs/apk/release/app-release-unsigned.apk
+```
+
 ## Credits
 
 The application icon was created using [IconKitchen](https://icon.kitchen/)
