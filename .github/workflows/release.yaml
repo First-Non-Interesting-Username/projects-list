@@ -80,11 +80,19 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
+      - name: Rename APK
+        run: |
+          SIGNED_FILE="${{ steps.sign-apk.outputs.signedReleaseFile }}"
+          NEW_NAME="ProjectsList-v${VERSION_NAME}.apk"
+          NEW_PATH="$(dirname "$SIGNED_FILE")/$NEW_NAME"
+          mv "$SIGNED_FILE" "$NEW_PATH"
+          echo "SIGNED_APK=$NEW_PATH" >> "$GITHUB_ENV"
+
       - name: Upload build outputs as artifacts
         uses: actions/upload-artifact@v5
         with:
           name: release-files
-          path: app/build/outputs/apk/release/*.apk
+          path: ${{ env.SIGNED_APK }}
 
       - name: Create git tag
         run: |
@@ -97,4 +105,4 @@ jobs:
           tag_name: ${{ env.TAG }}
           name: ${{ env.TAG }}
           generate_release_notes: true
-          files: ${{ steps.sign-apk.outputs.signedReleaseFile }}
+          files: ${{ env.SIGNED_APK }}
