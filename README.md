@@ -29,6 +29,16 @@ Get the APK from release tab and install it in your preffered way.
 
 ## Building
 
+You'll need the following things:
+
+- JDK 21
+- Android SDK (command:
+  `sdkmanager "platforms;android-36" \
+"build-tools;36.0.0" \
+"platform-tools" \
+"cmdline-tools;latest"`
+  )
+
 ```bash
 git clone https://github.com/First-Non-Interesting-Username/projects-list.git
 cd projects-list
