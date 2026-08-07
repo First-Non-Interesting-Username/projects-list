@@ -14,4 +14,4 @@ Inside the shell, run android studio with command:
 android-studio
 ```
 
-Before submitting a PR, make sure the app builds (`./gradlew build`).
+Before submitting a PR, make sure the app builds (`./gradlew assembleRelease`).

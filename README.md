@@ -51,6 +51,10 @@ chmod +x gradlew
 # APK outputs to: app/build/outputs/apk/release/app-release-unsigned.apk
 ```
 
+## Developement setup
+
+Use devenv, [CONTRIBUTING.md](/CONTRIBUTING.md) for more details
+
 ## Credits
 
 The application icon was created using [IconKitchen](https://icon.kitchen/)
